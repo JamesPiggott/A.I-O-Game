@@ -1,0 +1,74 @@
+ADD 1 x
+ADD 2 x
+NOOP
+SUB 1 x
+SWP x y
+NOOP
+MOV y x
+MARK END
+ADD 10 x
+NOOP
+SUB 2 x
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
