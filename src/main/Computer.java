@@ -1,7 +1,7 @@
 package main;
 
 import assets.register.cpu.CPU_X86;
-import assets.register.instruction.JumpRegister;
+import assets.register.instruction.MarkRegister;
 import assets.register.instruction.Register;
 import gui.GameGUI;
 import puzzles.PuzzleSimpleOscillatingValue;
@@ -63,11 +63,7 @@ public class Computer {
 			while (currentLine < instruction_lines.length) {
 				
 				if (this.runFast == false) {
-//					try {
-////						Thread.sleep(500);
-//					} catch (InterruptedException e) {
-//						e.printStackTrace();
-//					}
+
 				}
 				
 				String singleLinetoExecute = instruction_lines[currentLine];
@@ -155,20 +151,33 @@ public class Computer {
 	}
 	
 	public void performBreak(String[] instruction_elements) {
-		
-		if (instruction_elements.length == 1 && instruction_elements[0].contains("BREAK") && this.getCPU().getBooleanRegister().getValueInt() == 1) {
-			this.currentLine = this.endOfLoopLine;
-			System.out.println("Perform BREAK");
-		}
-		 this.getCPU().getBooleanRegister().setValue("false");	
-//		 this.forbidden = true;
+		if (instruction_elements.length == 1 && instruction_elements[0].contains("BREAK"))  {
+			
+			// 1. Check if boolean register is set to true
+			if (this.getCPU().getBooleanRegister().getValueBoolean() == true) {
+				// 2. Discover where the next JMP line is in relation to the current line
+				for (int jump : this.cpu_one.getJumpList()) {
+					if (jump > this.currentLine) {
+						
+						// 3. Set current line to that JMP line + 1
+						this.currentLine = jump;
+						break;
+					}
+				}
+				
+				// 4. Set boolean register to false
+				 this.getCPU().getBooleanRegister().setValue("false");	
+			}
+			
+
+		}		
+
 	}
 	
-//	public boolean forbidden = false;
-	
+
 	public void performJump(String[] instruction_elements) {
 		if (instruction_elements.length == 2) {
-			ArrayList<JumpRegister> mark_registers = this.cpu_one.getMarkList();
+			ArrayList<MarkRegister> mark_registers = this.cpu_one.getMarkList();
 			for (Register mark : mark_registers) {
 				if (mark.getRegisterName().contentEquals(instruction_elements[1])) {
 					this.currentLine = mark.getValueInt()-1;
@@ -177,8 +186,10 @@ public class Computer {
 		}
 	}
 	
-	public void setAllJumpLines(String all_lines) {
+	public void setAllJumpLines(String all_lines) {	
 		int count = 0;
+		
+		ArrayList<Integer> list_of_jump_lines = new ArrayList<Integer>();
 	
 		String[] lines_to_check = all_lines.split("\n");
 		for (String line : lines_to_check) {
@@ -187,8 +198,13 @@ public class Computer {
 			if (instruction[0].contentEquals("MARK")) {
 				this.cpu_one.recordMark(instruction, count);
 			}
+			
+			if (instruction[0].contentEquals("JMP")) {
+				list_of_jump_lines.add(count);
+			}
 			count++;
 		}
+		this.cpu_one.setJumpList(list_of_jump_lines);
 		
 	}
 

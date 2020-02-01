@@ -24,6 +24,10 @@ public class BooleanRegister implements Register {
 	public String getValue() {
 		return "" + this.value;
 	}
+	
+	public Boolean getValueBoolean() {
+		return this.value;
+	}
 
 	@Override
 	public String getRegisterName() {

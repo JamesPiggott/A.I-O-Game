@@ -4,18 +4,19 @@ import java.util.ArrayList;
 
 import assets.register.instruction.BooleanRegister;
 import assets.register.instruction.GeneralPurposeRegister;
-import assets.register.instruction.JumpRegister;
+import assets.register.instruction.MarkRegister;
 import assets.register.instruction.Register;
 
 public class CPU_X86 implements CPU {
 	
 	public ArrayList<Register> register_list;
-	public ArrayList<JumpRegister> mark_list;
+	public ArrayList<MarkRegister> mark_list;
+	public ArrayList<Integer> jump_list;
 	public BooleanRegister boolean_register;
 	
 	public CPU_X86() {
 		register_list = new ArrayList<Register>();
-		mark_list = new ArrayList<JumpRegister>();
+		mark_list = new ArrayList<MarkRegister>();
 		GeneralPurposeRegister register_one = new GeneralPurposeRegister("x");
 		GeneralPurposeRegister register_two = new GeneralPurposeRegister("y");
 		this.boolean_register = new BooleanRegister();
@@ -299,12 +300,20 @@ public class CPU_X86 implements CPU {
 	
 	public void recordMark(String[] code_line, int line_number) {
 		if (code_line.length == 2) {
-			JumpRegister jump = new JumpRegister(code_line[1], line_number);
+			MarkRegister jump = new MarkRegister(code_line[1], line_number);
 			this.mark_list.add(jump);
 		}	
 	}
 	
-	public ArrayList<JumpRegister> getMarkList() {
+	public void setJumpList(ArrayList<Integer> jump_list) {
+		this.jump_list = jump_list;
+	}
+	
+	public ArrayList<Integer> getJumpList() {
+		return this.jump_list;
+	}
+	
+	public ArrayList<MarkRegister> getMarkList() {
 		return mark_list;
 	}
 

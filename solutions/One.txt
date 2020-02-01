@@ -1,9 +1,15 @@
 MARK POINT
-NOOP
-NOOP
+ADD x 1 x
+TEST x > 5
+BREAK
 JMP POINT
 NOOP
 NOOP
+
+
+
+
+
 
 
 
