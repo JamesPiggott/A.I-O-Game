@@ -1,14 +1,22 @@
-ADD 1 x
-ADD 2 x
+MARK POINT
 NOOP
-SUB 1 x
-SWP x y
 NOOP
-MOV y x
-MARK END
-ADD 10 x
+JMP POINT
 NOOP
-SUB 2 x
+NOOP
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

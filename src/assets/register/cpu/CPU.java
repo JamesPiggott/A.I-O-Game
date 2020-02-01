@@ -6,7 +6,7 @@ public interface CPU {
 	
 	public void performSubtraction(String[] code_line);
 	
-	public void performPower(String[] code_line);
+	public void performMultiplication(String[] code_line);
 	
 	public void performRemainder(String[] code_line);
 	

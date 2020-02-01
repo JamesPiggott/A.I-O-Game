@@ -48,6 +48,8 @@ public class GameGUI extends JFrame {
 	private String puzzleName;
 	private Color backgroundColor;
 	
+	private boolean started;
+	
 	public GameGUI(Computer computer) {
 		super("Game GUI");
 		this.backgroundColor = Color.DARK_GRAY;
@@ -69,6 +71,7 @@ public class GameGUI extends JFrame {
 		this.add(mainmenu);
 		this.puzzleName = "";
         setVisible(true);
+        started = false;
 	}
 	
 	public void buildGUI() {
@@ -79,6 +82,7 @@ public class GameGUI extends JFrame {
           public void actionPerformed(ActionEvent e)
           {
         	  resetComputer();
+        	  started = false;
           }
         });
         
@@ -98,6 +102,10 @@ public class GameGUI extends JFrame {
         {
           public void actionPerformed(ActionEvent e)
           {
+        	  if (started == false) {
+        		  setAllMarkPoints(codeBox.getText());
+        		  started = true;
+        	  }
         	  sendCodetoGame(codeBox.getText(), true, false);
           }
         });
@@ -316,6 +324,10 @@ public class GameGUI extends JFrame {
         });
         this.settingsmenu.add(goToMainMenuButton);
         this.settingsmenu.setBackground(this.backgroundColor);
+	}
+	
+	public void setAllMarkPoints(String code) {
+		this.computer.setAllJumpLines(code);
 	}
 	
 	public void sendCodetoGame(String code, boolean executeSingleLine, boolean runFast) {

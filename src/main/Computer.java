@@ -1,6 +1,7 @@
 package main;
 
 import assets.register.cpu.CPU_X86;
+import assets.register.instruction.JumpRegister;
 import assets.register.instruction.Register;
 import gui.GameGUI;
 import puzzles.PuzzleSimpleOscillatingValue;
@@ -99,7 +100,7 @@ public class Computer {
 		case "NOOP":
 			break;
 		case "MARK":
-			this.cpu_one.recordMark(instruction_elements);
+			this.cpu_one.recordMark(instruction_elements, this.currentLine);
 			break;
 		case "JMP":
 			this.performJump(instruction_elements);
@@ -121,14 +122,14 @@ public class Computer {
 		case "SUB":
 			this.cpu_one.performSubtraction(instruction_elements);
 			break;
-		case "PWR":
-			this.cpu_one.performPower(instruction_elements);
-			break;
-		case "REM":
-			this.cpu_one.performRemainder(instruction_elements);
+		case "MUL":
+			this.cpu_one.performMultiplication(instruction_elements);
 			break;
 		case "DIV":
 			this.cpu_one.performDivision(instruction_elements);
+			break;
+		case "REM":
+			this.cpu_one.performRemainder(instruction_elements);
 			break;
 		case "SWP":
 			this.cpu_one.performSwap(instruction_elements);
@@ -160,29 +161,35 @@ public class Computer {
 			System.out.println("Perform BREAK");
 		}
 		 this.getCPU().getBooleanRegister().setValue("false");	
-		 this.forbidden = true;
+//		 this.forbidden = true;
 	}
 	
-	public boolean forbidden = false;
+//	public boolean forbidden = false;
 	
 	public void performJump(String[] instruction_elements) {
-		System.out.println("Perform JUMP");
-		if (this.forbidden == true) {
-			this.endOfLoopLine = this.currentLine;
-			this.endOfLoopLine++;
-			int count = 0;
-			if (instruction_elements.length == 2) {
-				for (String mark : this.instruction_lines) {
-					if (mark.contains(instruction_elements[1]) && mark.contains("MARK")) {
-						this.currentLine = count;
-						this.forbidden = false;
-					} else {
-						count++;
-					}
+		if (instruction_elements.length == 2) {
+			ArrayList<JumpRegister> mark_registers = this.cpu_one.getMarkList();
+			for (Register mark : mark_registers) {
+				if (mark.getRegisterName().contentEquals(instruction_elements[1])) {
+					this.currentLine = mark.getValueInt()-1;
 				}
-			}	
-			this.forbidden = false;
+			}
 		}
+	}
+	
+	public void setAllJumpLines(String all_lines) {
+		int count = 0;
+	
+		String[] lines_to_check = all_lines.split("\n");
+		for (String line : lines_to_check) {
+			String[] instruction = line.split("\\s+");
+			
+			if (instruction[0].contentEquals("MARK")) {
+				this.cpu_one.recordMark(instruction, count);
+			}
+			count++;
+		}
+		
 	}
 
 	public void resetComputerState() {

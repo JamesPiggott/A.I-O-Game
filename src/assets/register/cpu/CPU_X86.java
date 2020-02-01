@@ -4,22 +4,24 @@ import java.util.ArrayList;
 
 import assets.register.instruction.BooleanRegister;
 import assets.register.instruction.GeneralPurposeRegister;
+import assets.register.instruction.JumpRegister;
 import assets.register.instruction.Register;
 
 public class CPU_X86 implements CPU {
 	
 	public ArrayList<Register> register_list;
-	public ArrayList<String> mark_list;
+	public ArrayList<JumpRegister> mark_list;
 	public BooleanRegister boolean_register;
 	
 	public CPU_X86() {
 		register_list = new ArrayList<Register>();
+		mark_list = new ArrayList<JumpRegister>();
 		GeneralPurposeRegister register_one = new GeneralPurposeRegister("x");
 		GeneralPurposeRegister register_two = new GeneralPurposeRegister("y");
 		this.boolean_register = new BooleanRegister();
 		this.register_list.add(register_one);
 		this.register_list.add(register_two);
-		this.mark_list = new ArrayList<String>();
+		
 	}
 	
 	public void setRegisterValue(int register_value) {
@@ -33,47 +35,137 @@ public class CPU_X86 implements CPU {
 	}
 	
 	public void performAddition(String[] code_line) {
-		int addition_value = Integer.parseInt(code_line[1]);
-		if (addition_value > -99999 && addition_value < 99999) {
-			int register_value = Integer.parseInt(register_list.get(0).getValue());
-			register_value = register_value + addition_value;
-			setRegisterValue(register_value);
+		Register from = getRegister(code_line[1]);
+		int base_value = 0;
+		if (from != null) {
+			base_value = from.getValueInt();
+		} else {
+			base_value = Integer.parseInt(code_line[1]);
+		}
+		
+		Register addition = getRegister(code_line[2]);
+		int addition_value = 0;
+		if (addition != null) {
+			addition_value = addition.getValueInt();
+		} else {
+			addition_value = Integer.parseInt(code_line[2]);
+		}
+		
+		int sum_value = base_value + addition_value;
+		
+		if (sum_value > -99999 && sum_value < 99999) {
+			Register to = getRegister(code_line[3]);
+			if (to != null) {
+				to.setValue("" + sum_value);
+			}
 		}
 	}
 	
 	public void performSubtraction(String[] code_line) {
-		int subtraction_value = Integer.parseInt(code_line[1]);
-		if (subtraction_value > -99999 && subtraction_value < 99999) {
-			int register_value = Integer.parseInt(register_list.get(0).getValue());
-			register_value = register_value - subtraction_value;
-			setRegisterValue(register_value);
+		Register from = getRegister(code_line[1]);
+		int base_value = 0;
+		if (from != null) {
+			base_value = from.getValueInt();
+		} else {
+			base_value = Integer.parseInt(code_line[1]);
+		}
+		
+		Register subtraction = getRegister(code_line[2]);
+		int subtraction_value = 0;
+		if (subtraction != null) {
+			subtraction_value = subtraction.getValueInt();
+		} else {
+			subtraction_value = Integer.parseInt(code_line[2]);
+		}
+		
+		int sub_value = base_value + subtraction_value;
+		
+		if (sub_value > -99999 && sub_value < 99999) {
+			Register to = getRegister(code_line[3]);
+			if (to != null) {
+				to.setValue("" + sub_value);
+			}
 		}
 	}
 	
-	public void performPower(String[] code_line) {
-		int power_value = Integer.parseInt(code_line[1]);
-		if (power_value > -99999 && power_value < 99999) {
-			int register_value = Integer.parseInt(register_list.get(0).getValue());
-			register_value = register_value * power_value;
-			setRegisterValue(register_value);
+	public void performMultiplication(String[] code_line) {
+		Register from = getRegister(code_line[1]);
+		int base_value = 0;
+		if (from != null) {
+			base_value = from.getValueInt();
+		} else {
+			base_value = Integer.parseInt(code_line[1]);
+		}
+		
+		Register multi = getRegister(code_line[2]);
+		int multi_value = 0;
+		if (multi != null) {
+			multi_value = multi.getValueInt();
+		} else {
+			multi_value = Integer.parseInt(code_line[2]);
+		}
+		
+		int mul_value = base_value * multi_value;
+		
+		if (mul_value > -99999 && mul_value < 99999) {
+			Register to = getRegister(code_line[3]);
+			if (to != null) {
+				to.setValue("" + mul_value);
+			}
 		}
 	}
 	
 	public void performRemainder(String[] code_line) {
-		int remainder_value = Integer.parseInt(code_line[1]);
-		if (remainder_value > -99999 && remainder_value < 99999) {
-			int register_value = Integer.parseInt(register_list.get(0).getValue());
-			register_value = register_value % remainder_value;
-			setRegisterValue(register_value);
+		Register from = getRegister(code_line[1]);
+		int base_value = 0;
+		if (from != null) {
+			base_value = from.getValueInt();
+		} else {
+			base_value = Integer.parseInt(code_line[1]);
+		}
+		
+		Register remainder = getRegister(code_line[2]);
+		int remainder_value = 0;
+		if (remainder != null) {
+			remainder_value = remainder.getValueInt();
+		} else {
+			remainder_value = Integer.parseInt(code_line[2]);
+		}
+		
+		int rem_value = base_value % remainder_value;
+		
+		if (rem_value > -99999 && rem_value < 99999) {
+			Register to = getRegister(code_line[3]);
+			if (to != null) {
+				to.setValue("" + rem_value);
+			}
 		}		
 	}
 	
 	public void performDivision(String[] code_line) {
-		int division_value = Integer.parseInt(code_line[1]);
-		if (division_value > -99999 && division_value < 99999) {
-			int register_value = Integer.parseInt(register_list.get(0).getValue());
-			register_value = register_value / division_value;
-			setRegisterValue(register_value);
+		Register from = getRegister(code_line[1]);
+		int base_value = 0;
+		if (from != null) {
+			base_value = from.getValueInt();
+		} else {
+			base_value = Integer.parseInt(code_line[1]);
+		}
+		
+		Register division = getRegister(code_line[2]);
+		int division_value = 0;
+		if (division != null) {
+			division_value = division.getValueInt();
+		} else {
+			division_value = Integer.parseInt(code_line[2]);
+		}
+		
+		int div_value = base_value / division_value;
+		
+		if (div_value > -99999 && div_value < 99999) {
+			Register to = getRegister(code_line[3]);
+			if (to != null) {
+				to.setValue("" + div_value);
+			}
 		}	
 	}
 	
@@ -141,6 +233,15 @@ public class CPU_X86 implements CPU {
 		}
 	}
 	
+	public Register getRegister(String name) {
+		for (Register register : this.register_list) {
+			if (register.getRegisterName().equals(name)) {
+				return register;
+			} 
+		}
+		return null;
+	}
+	
 	/**
 	 * performTest will evaluate both the numerical and alphabetical order. 
 	 * In case of a reference to a register it is the value stored that will be evaluated.
@@ -148,7 +249,7 @@ public class CPU_X86 implements CPU {
 	 */
 	public void performTest(String[] instruction_elements) {
 		if (instruction_elements.length == 4 && (instruction_elements[2].contains(">") || instruction_elements[2].contains("<") || instruction_elements[2].contains("="))) {
-			// Check if argument 1 and 3 are legitimate values or registers
+
 			String operand = instruction_elements[2];
 			
 			int one = 0;
@@ -163,52 +264,47 @@ public class CPU_X86 implements CPU {
 			}
 			
 
+
+			two = Integer.parseInt(instruction_elements[3]);
 			
-//			if (instruction_elements[1].matches("^[a-zA-Z]*$") && instruction_elements[3].matches("^[a-zA-Z]*$")) {
-//				// set register to true of false
-//			} else if(instruction_elements[1].matches("^[0-9]*$") && instruction_elements[3].matches("^[0-9]*$")) {
-				// set register to true or false
-				two = Integer.parseInt(instruction_elements[3]);
-				
-				if (one >= -9999 && one <= 9999 && two >= -9999 && two <= 9999) {
-					if (operand.contentEquals(">")) {
-						if (one > two) {
-							this.getBooleanRegister().setValue(true);
-						} else {
-							this.getBooleanRegister().setValue(false);
-						}
-					} else if (operand.contentEquals("<")) {
-						if (one < two) {
-							this.getBooleanRegister().setValue(true);
-						} else {
-							this.getBooleanRegister().setValue(false);
-						}		
+			if (one >= -9999 && one <= 9999 && two >= -9999 && two <= 9999) {
+				if (operand.contentEquals(">")) {
+					if (one > two) {
+						this.getBooleanRegister().setValue(true);
 					} else {
-						System.out.println("One: " + one + " two: " + two);
-						if (one == two) {
-							System.out.println("If they are equal!");
-							this.getBooleanRegister().setValue(true);
-						} else {
-							this.getBooleanRegister().setValue(false);
-						}
+						this.getBooleanRegister().setValue(false);
+					}
+				} else if (operand.contentEquals("<")) {
+					if (one < two) {
+						this.getBooleanRegister().setValue(true);
+					} else {
+						this.getBooleanRegister().setValue(false);
+					}		
+				} else {
+					System.out.println("One: " + one + " two: " + two);
+					if (one == two) {
+						System.out.println("If they are equal!");
+						this.getBooleanRegister().setValue(true);
+					} else {
+						this.getBooleanRegister().setValue(false);
 					}
 				}
+			}
 				
-				
-//			} else {
-//				this.getBooleanRegister().setValue(false);
-//			}
+			
+
 		}
 		
 	}
 	
-	public void recordMark(String[] code_line) {
+	public void recordMark(String[] code_line, int line_number) {
 		if (code_line.length == 2) {
-			this.mark_list.add(code_line[1]);
+			JumpRegister jump = new JumpRegister(code_line[1], line_number);
+			this.mark_list.add(jump);
 		}	
 	}
 	
-	public ArrayList<String> getMarkList() {
+	public ArrayList<JumpRegister> getMarkList() {
 		return mark_list;
 	}
 
