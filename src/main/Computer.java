@@ -152,26 +152,17 @@ public class Computer {
 	
 	public void performBreak(String[] instruction_elements) {
 		if (instruction_elements.length == 1 && instruction_elements[0].contains("BREAK"))  {
-			
-			// 1. Check if boolean register is set to true
 			if (this.getCPU().getBooleanRegister().getValueBoolean() == true) {
-				// 2. Discover where the next JMP line is in relation to the current line
+				System.out.println("Is it set to true?");
 				for (int jump : this.cpu_one.getJumpList()) {
 					if (jump > this.currentLine) {
-						
-						// 3. Set current line to that JMP line + 1
 						this.currentLine = jump;
 						break;
 					}
 				}
-				
-				// 4. Set boolean register to false
 				 this.getCPU().getBooleanRegister().setValue("false");	
 			}
-			
-
 		}		
-
 	}
 	
 

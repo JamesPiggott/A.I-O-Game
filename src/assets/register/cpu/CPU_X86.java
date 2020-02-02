@@ -20,6 +20,7 @@ public class CPU_X86 implements CPU {
 		GeneralPurposeRegister register_one = new GeneralPurposeRegister("x");
 		GeneralPurposeRegister register_two = new GeneralPurposeRegister("y");
 		this.boolean_register = new BooleanRegister();
+		this.boolean_register.setValue(false);
 		this.register_list.add(register_one);
 		this.register_list.add(register_two);
 		
@@ -254,20 +255,28 @@ public class CPU_X86 implements CPU {
 			String operand = instruction_elements[2];
 			
 			int one = 0;
-			int two;
+			int two = 0;
 			
-			if (instruction_elements[1].contains("x")) {
-				one = this.getRegisters().get(0).getValueInt();
+			if (instruction_elements[1].contains("x") || instruction_elements[1].contains("y")) {
+				if (instruction_elements[1].contains("x")) {
+					one = this.getRegisters().get(0).getValueInt();
+				} else {
+					one = this.getRegisters().get(1).getValueInt();
+				}
+			} else {
+				one = Integer.parseInt(instruction_elements[1]);
 			}
 			
-			if (instruction_elements[1].contains("y")) {
-				one = this.getRegisters().get(1).getValueInt();
+			if (instruction_elements[3].contains("x") || instruction_elements[3].contains("y")) {
+				if (instruction_elements[3].contains("x")) {
+					two = this.getRegisters().get(0).getValueInt();
+				} else {
+					two = this.getRegisters().get(1).getValueInt();
+				}
+			} else {
+				two = Integer.parseInt(instruction_elements[3]);
 			}
-			
-
-
-			two = Integer.parseInt(instruction_elements[3]);
-			
+							
 			if (one >= -9999 && one <= 9999 && two >= -9999 && two <= 9999) {
 				if (operand.contentEquals(">")) {
 					if (one > two) {
@@ -275,27 +284,25 @@ public class CPU_X86 implements CPU {
 					} else {
 						this.getBooleanRegister().setValue(false);
 					}
-				} else if (operand.contentEquals("<")) {
+				} 
+				
+				if (operand.contentEquals("<")) {
 					if (one < two) {
 						this.getBooleanRegister().setValue(true);
 					} else {
 						this.getBooleanRegister().setValue(false);
 					}		
-				} else {
-					System.out.println("One: " + one + " two: " + two);
+				} 
+				
+				if (operand.contentEquals("=")) {
 					if (one == two) {
-						System.out.println("If they are equal!");
 						this.getBooleanRegister().setValue(true);
 					} else {
 						this.getBooleanRegister().setValue(false);
 					}
-				}
+				} 
 			}
-				
-			
-
 		}
-		
 	}
 	
 	public void recordMark(String[] code_line, int line_number) {
