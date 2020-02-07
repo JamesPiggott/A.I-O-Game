@@ -129,11 +129,10 @@ public class Computer {
 			break;
 		case "SWP":
 			this.cpu_one.performSwap(instruction_elements);
-			break;
-			
+			break;	
 			
 		case "FCH":
-			System.out.println("FCH");
+			this.performFetch();
 			break;
 		case "SEEK":
 			System.out.println("SEEK");
@@ -196,6 +195,10 @@ public class Computer {
 			count++;
 		}
 		this.cpu_one.setJumpList(list_of_jump_lines);
+		
+	}
+	
+	public void performFetch() {
 		
 	}
 

@@ -2,6 +2,7 @@ package assets.register.cpu;
 
 import java.util.ArrayList;
 
+import assets.register.files.FileOperations;
 import assets.register.instruction.BooleanRegister;
 import assets.register.instruction.GeneralPurposeRegister;
 import assets.register.instruction.MarkRegister;
@@ -11,6 +12,7 @@ public class CPU_X86 implements CPU {
 	
 	public ArrayList<Register> register_list;
 	public ArrayList<MarkRegister> mark_list;
+	public ArrayList<FileOperations> file_list;
 	public ArrayList<Integer> jump_list;
 	public BooleanRegister boolean_register;
 	
@@ -335,5 +337,15 @@ public class CPU_X86 implements CPU {
 	
 	public BooleanRegister getBooleanRegister() {
 		return this.boolean_register;	
+	}
+	
+	public FileOperations getFileOperations(String name) {
+		for (FileOperations file : file_list) {
+			if (file.getName().contentEquals(name)) {
+				return file;
+			}
+		}
+		FileOperations file = new FileOperations(name);
+		return file;
 	}
 }

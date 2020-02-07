@@ -22,8 +22,18 @@ public class FileOperations {
 		this.file_contents = new HashMap<Integer, String>();
 	}
 	
+	public void seekHandler(int location_change) {
+//		if () {
+//			
+//		}
+	}
+	
 	public void wipeContents() {
 		this.file_contents.clear();
+	}
+	
+	public String getName() {
+		return this.file_name;
 	}
 
 }
