@@ -22,10 +22,29 @@ public class FileOperations {
 		this.file_contents = new HashMap<Integer, String>();
 	}
 	
-	public void seekHandler(int location_change) {
-//		if () {
-//			
-//		}
+	public void seekHandler(String operand, int location_change) {
+		if (operand.contentEquals("+")) {
+			if (location_change + location_handler > file_contents.size() - 1) {
+				location_handler = file_contents.size() - 1;
+			} else {
+				location_handler = location_change + location_handler;
+			}
+		}
+		
+		if (operand.contentEquals("-")) {
+			if (location_handler - location_change < 0) {
+				location_handler = 0;
+			} else {
+				location_handler = location_handler - location_change;
+			}
+		}
+ 	}
+	
+	public void insertValue(String value) {
+		if (value.length() < 30) {
+			file_contents.put(location_handler+1, value);
+			location_handler++;
+		}
 	}
 	
 	public void wipeContents() {
@@ -35,5 +54,4 @@ public class FileOperations {
 	public String getName() {
 		return this.file_name;
 	}
-
 }
