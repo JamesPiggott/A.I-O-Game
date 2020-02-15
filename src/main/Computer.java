@@ -199,7 +199,7 @@ public class Computer {
 	}
 	
 	public void performFetch() {
-		
+		// Fetch a file
 	}
 
 	public void resetComputerState() {
