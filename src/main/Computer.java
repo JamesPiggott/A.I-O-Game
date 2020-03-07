@@ -29,9 +29,13 @@ public class Computer {
 		this.currentLine = 0;
 	}
 	
-	public void runOneGameCycle() {
+	/*
+	 * Start the game by activating the GUI and set gameRunning to true.
+	 */
+	public void startGame() {
 		boolean guirunning = false;
 		
+		// Set up a new graphical user interface for the game
 		while (this.gameRunning == true) {
 			if (guirunning == false) {
 				this.gui = new GameGUI(this);
@@ -45,11 +49,10 @@ public class Computer {
 		this.runFast = runFast;
 
 		if (singleLine == true) {
-//			System.out.println("Run single Line: " + this.cpu_cycle);
 			runContinousProgramLoop(instruction_lines, gameGUI, singleLine);
 			this.cpu_cycle++;
 		} else {
-//			System.out.println("Run fast");
+			System.out.println("Anything>");
 			while (this.cpu_cycle <= 100) {
 				runContinousProgramLoop(instruction_lines, gameGUI, singleLine);
 				this.cpu_cycle++;
@@ -58,7 +61,6 @@ public class Computer {
 	}
 	
 	public void runContinousProgramLoop(String[] instruction_lines, GameGUI gameGUI, boolean singleLine) {
-//		this.currentLine = 0;
 		if (singleLine != true) {
 			while (currentLine < instruction_lines.length) {
 				
@@ -72,7 +74,6 @@ public class Computer {
 							
 			}
 		} else {
-//			System.out.println(this.currentLine);
 			String singleLinetoExecute = instruction_lines[currentLine];
 			evaluateInstruction(singleLinetoExecute);
 			currentLine++;

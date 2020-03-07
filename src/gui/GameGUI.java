@@ -135,7 +135,7 @@ public class GameGUI extends JFrame {
         buttonPanel.add(resetButton);
         buttonPanel.add(pauseButton);
         buttonPanel.add(stepButton);
-//        buttonPanel.add(runButton);
+        buttonPanel.add(runButton);
 //        buttonPanel.add(runFastButton);
         buttonPanel.setBackground(this.backgroundColor);
         
