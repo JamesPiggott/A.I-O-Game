@@ -48,30 +48,40 @@ public class Computer {
 		this.instruction_lines = codetorun.split("\n");
 		this.runFast = runFast;
 
-		if (singleLine == true) {
+//		if (singleLine == true) {
 			runContinousProgramLoop(instruction_lines, gameGUI, singleLine);
 			this.cpu_cycle++;
-		} else {
-			System.out.println("Anything>");
-			while (this.cpu_cycle <= 100) {
-				runContinousProgramLoop(instruction_lines, gameGUI, singleLine);
-				this.cpu_cycle++;
-			}
-		}
+//		} else {
+//			while (this.cpu_cycle <= 100) {
+//				runContinousProgramLoop(instruction_lines, gameGUI, singleLine);
+//				this.cpu_cycle++;
+//			}
+//		}
 	}
 	
 	public void runContinousProgramLoop(String[] instruction_lines, GameGUI gameGUI, boolean singleLine) {
 		if (singleLine != true) {
 			while (currentLine < instruction_lines.length) {
 				
-				if (this.runFast == false) {
-
-				}
+				System.out.println("Go into RUN mode");
 				
 				String singleLinetoExecute = instruction_lines[currentLine];
 				evaluateInstruction(singleLinetoExecute);
 				currentLine++;
-							
+				
+				if (this.currentLine == instruction_lines.length) {
+					this.currentLine = 0;
+				}
+				
+				this.gui.displayOutputValue();
+				this.gui.displayValueCpuRegisters();
+				compareResults();
+				
+				try {
+					Thread.sleep(100);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}			
 			}
 		} else {
 			String singleLinetoExecute = instruction_lines[currentLine];
@@ -153,7 +163,6 @@ public class Computer {
 	public void performBreak(String[] instruction_elements) {
 		if (instruction_elements.length == 1 && instruction_elements[0].contains("BREAK"))  {
 			if (this.getCPU().getBooleanRegister().getValueBoolean() == true) {
-				System.out.println("Is it set to true?");
 				for (int jump : this.cpu_one.getJumpList()) {
 					if (jump > this.currentLine) {
 						this.currentLine = jump;
