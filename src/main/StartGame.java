@@ -1,5 +1,9 @@
 package main;
 
+//import javax.swing.SwingUtilities;
+
+import gui.GameGUI;
+
 public class StartGame {
 	
 	public static void main(String[] args) {
@@ -8,7 +12,12 @@ public class StartGame {
 	}
 	
 	public void startGame() {
-		Computer computer = new Computer();
-		computer.startGame();
+//       SwingUtilities.invokeLater(new Runnable() {
+//        public void run() {
+    		Computer computer = new Computer();
+    		computer.startGame(computer);
+//        }
+//    });
+		
 	}
 }

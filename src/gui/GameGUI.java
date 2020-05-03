@@ -21,6 +21,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
+import javax.swing.SwingUtilities;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.DefaultHighlighter;
 import javax.swing.text.DefaultHighlighter.DefaultHighlightPainter;
@@ -51,6 +52,7 @@ public class GameGUI extends JFrame {
 	private boolean started;
 	
 	public GameGUI(Computer computer) {
+		
 		super("Game GUI");
 		this.backgroundColor = Color.DARK_GRAY;
 		this.computer = computer;
@@ -72,6 +74,7 @@ public class GameGUI extends JFrame {
 		this.puzzleName = "";
         setVisible(true);
         started = false;
+        SwingUtilities.isEventDispatchThread();
 	}
 	
 	public void buildGUI() {
@@ -105,18 +108,22 @@ public class GameGUI extends JFrame {
         	  if (started == false) {
         		  setAllMarkPoints(codeBox.getText());
         		  started = true;
-        	  }
+        	  }       	  
         	  sendCodetoGame(codeBox.getText(), true, false);
           }
         });
         
         // Run code indefinitely, but slow enough to observe
         JButton runButton = new JButton("Run");
-        runButton.addActionListener(new ActionListener()
-        {
-          public void actionPerformed(ActionEvent e)
-          {
-        	  sendCodetoGame(codeBox.getText(), false, false);
+        runButton.addActionListener(new ActionListener() {
+          public void actionPerformed(ActionEvent e) {
+        	        	  
+				new Thread(new Runnable() {
+					public void run() {
+						sendCodetoGame(codeBox.getText(), false, false);
+					}
+				}).start();
+
           }
         });
         
@@ -335,23 +342,31 @@ public class GameGUI extends JFrame {
 	}
 
 	public void displayOutputValue() {	
-		highlightCodeLine();
+		highlightCodeLine(this.codeBox, this.computer);
 		this.output = this.values.getText() + " " + this.computer.retrieveCurrentValueCPUs().get(0).getValue();
 		this.values.setText(this.output);
 		this.values.updateUI();
 	}
 	
-	public void highlightCodeLine() {
-		this.codeBox.getHighlighter().removeAllHighlights();
-		DefaultHighlightPainter painter = new DefaultHighlighter.DefaultHighlightPainter(Color.GRAY);
-		try {
-            int start = this.codeBox.getLineStartOffset(this.computer.getCurrentLine());
-            int end = this.codeBox.getLineEndOffset(this.computer.getCurrentLine());
-			this.codeBox.getHighlighter().addHighlight(start, end, painter);		
 
-		} catch (BadLocationException e) {
-			e.printStackTrace();
-		}
+	
+	public void highlightCodeLine( JTextArea   codeBox, Computer   computer) {
+		
+//		SwingUtilities.invokeLater(new Runnable() {
+//	    public void run() {
+			codeBox.getHighlighter().removeAllHighlights();
+			DefaultHighlightPainter painter = new DefaultHighlighter.DefaultHighlightPainter(Color.GRAY);
+			try {
+	            int start = codeBox.getLineStartOffset(computer.getCurrentLine());
+	            int end = codeBox.getLineEndOffset(computer.getCurrentLine());
+				codeBox.getHighlighter().addHighlight(start, end, painter);
+
+			} catch (BadLocationException e) {
+				e.printStackTrace();
+			}
+//	    }
+//	  });		
+		
 
 	}
 	
@@ -376,7 +391,7 @@ public class GameGUI extends JFrame {
 			register.setValue("0");
 			index++;
 		}
-		highlightCodeLine();
+		highlightCodeLine(this.codeBox, this.computer);
 	}
 	
 	private void selectPuzzle(java.awt.event.ActionEvent evt) {
@@ -402,7 +417,7 @@ public class GameGUI extends JFrame {
 	            e.printStackTrace();
 	        }
 	        this.codeBox.setText(contentBuilder.toString());
-	        highlightCodeLine();
+	        highlightCodeLine(this.codeBox, this.computer);
 	        this.codeBox.setCaretPosition(0);
         } 
 	}

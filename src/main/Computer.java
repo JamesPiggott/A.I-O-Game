@@ -8,6 +8,8 @@ import puzzles.PuzzleSimpleOscillatingValue;
 
 import java.util.ArrayList;
 
+import javax.swing.SwingUtilities;
+
 public class Computer {
 	
 	public GameGUI gui;
@@ -32,13 +34,21 @@ public class Computer {
 	/*
 	 * Start the game by activating the GUI and set gameRunning to true.
 	 */
-	public void startGame() {
+	public void startGame(Computer computer) {
 		boolean guirunning = false;
 		
 		// Set up a new graphical user interface for the game
 		while (this.gameRunning == true) {
 			if (guirunning == false) {
 				this.gui = new GameGUI(this);
+				
+//			       SwingUtilities.invokeLater(new Runnable() {
+//			            public void run() {
+//			            	this.gui = new GameGUI(computer);
+//			            }
+//			        });
+				
+				
 				guirunning = true;
 			}
 		}
