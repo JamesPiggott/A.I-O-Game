@@ -5,10 +5,7 @@ import assets.register.instruction.MarkRegister;
 import assets.register.instruction.Register;
 import gui.GameGUI;
 import puzzles.PuzzleSimpleOscillatingValue;
-
 import java.util.ArrayList;
-
-import javax.swing.SwingUtilities;
 
 public class Computer {
 	
@@ -27,7 +24,7 @@ public class Computer {
 		this.gameRunning = true;
 		this.cpu_one = new CPU_X86();
 		this.puzzle = new PuzzleSimpleOscillatingValue();
-		this.cpu_cycle = 1;
+		this.cpu_cycle = 0;
 		this.currentLine = 0;
 	}
 	
@@ -40,15 +37,7 @@ public class Computer {
 		// Set up a new graphical user interface for the game
 		while (this.gameRunning == true) {
 			if (guirunning == false) {
-				this.gui = new GameGUI(this);
-				
-//			       SwingUtilities.invokeLater(new Runnable() {
-//			            public void run() {
-//			            	this.gui = new GameGUI(computer);
-//			            }
-//			        });
-				
-				
+				this.gui = new GameGUI(this);				
 				guirunning = true;
 			}
 		}
@@ -58,54 +47,44 @@ public class Computer {
 		this.instruction_lines = codetorun.split("\n");
 		this.runFast = runFast;
 
-//		if (singleLine == true) {
+		if (singleLine == true && this.cpu_cycle < 1000) {
+			runSingleLineOfCode(instruction_lines);
+		} else if (this.cpu_cycle < 1000)  {
 			runContinousProgramLoop(instruction_lines, gameGUI, singleLine);
-			this.cpu_cycle++;
-//		} else {
-//			while (this.cpu_cycle <= 100) {
-//				runContinousProgramLoop(instruction_lines, gameGUI, singleLine);
-//				this.cpu_cycle++;
-//			}
-//		}
+		}
 	}
 	
 	public void runContinousProgramLoop(String[] instruction_lines, GameGUI gameGUI, boolean singleLine) {
-		if (singleLine != true) {
-			while (currentLine < instruction_lines.length) {
-				
-				System.out.println("Go into RUN mode");
-				
-				String singleLinetoExecute = instruction_lines[currentLine];
-				evaluateInstruction(singleLinetoExecute);
-				currentLine++;
-				
-				if (this.currentLine == instruction_lines.length) {
-					this.currentLine = 0;
-				}
-				
-				this.gui.displayOutputValue();
-				this.gui.displayValueCpuRegisters();
-				compareResults();
-				
-				try {
+		while (currentLine <= instruction_lines.length && this.cpu_cycle < 1000) {
+			runSingleLineOfCode(instruction_lines);
+			try {
+				if (this.runFast) {
+					Thread.sleep(5);
+				} else {
 					Thread.sleep(100);
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}			
-			}
-		} else {
-			String singleLinetoExecute = instruction_lines[currentLine];
-			evaluateInstruction(singleLinetoExecute);
-			currentLine++;
-			if (this.currentLine == instruction_lines.length) {
-				this.currentLine = 0;
-			}
+				}
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}			
+		}
+	}
+	
+	public void runSingleLineOfCode(String[] instruction_lines) {
+		String singleLinetoExecute = instruction_lines[currentLine];
+		evaluateInstruction(singleLinetoExecute);
+		
+		currentLine++;
+		if (this.currentLine == instruction_lines.length) {
+			this.currentLine = 0;
 		}
 		
+		this.cpu_cycle++;
 		this.gui.displayOutputValue();
 		this.gui.displayValueCpuRegisters();
 		compareResults();
 	}
+	
+	
 	
 	public void evaluateInstruction(String codeline) {
 		String[] instruction_elements = codeline.split("\\s+");
@@ -249,7 +228,7 @@ public class Computer {
 	public void resetComputer() {
 		this.cpu_one = new CPU_X86();
 		this.puzzle = new PuzzleSimpleOscillatingValue();
-		this.cpu_cycle = 1;
+		this.cpu_cycle = 0;
 		this.currentLine = 0;
 	}
 	

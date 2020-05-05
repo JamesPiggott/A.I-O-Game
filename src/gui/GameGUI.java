@@ -120,21 +120,24 @@ public class GameGUI extends JFrame {
         	        	  
 				new Thread(new Runnable() {
 					public void run() {
+						setAllMarkPoints(codeBox.getText());
 						sendCodetoGame(codeBox.getText(), false, false);
 					}
 				}).start();
-
           }
         });
         
         // Run code indefinitely, but at a much faster rate to quickly pass all tests.
         JButton runFastButton = new JButton("Run Fast");
-        runFastButton.addActionListener(new ActionListener()
-        {
-          public void actionPerformed(ActionEvent e)
-          {
-        	  sendCodetoGame(codeBox.getText(), false, true);
-          }
+        runFastButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				new Thread(new Runnable() {
+					public void run() {
+						setAllMarkPoints(codeBox.getText());
+						sendCodetoGame(codeBox.getText(), false, true);
+					}
+				}).start();
+			}
         });
         
         // Control panel
@@ -143,7 +146,7 @@ public class GameGUI extends JFrame {
         buttonPanel.add(pauseButton);
         buttonPanel.add(stepButton);
         buttonPanel.add(runButton);
-//        buttonPanel.add(runFastButton);
+        buttonPanel.add(runFastButton);
         buttonPanel.setBackground(this.backgroundColor);
         
         
@@ -249,7 +252,6 @@ public class GameGUI extends JFrame {
 		mainPanel.setVisible(true);
 		this.gamegui.add(mainPanel);
 		this.gamegui.setBackground(this.backgroundColor);
-		
     }
 	
 	public void buildPuzzleMenu() {
@@ -351,23 +353,15 @@ public class GameGUI extends JFrame {
 
 	
 	public void highlightCodeLine( JTextArea   codeBox, Computer   computer) {
-		
-//		SwingUtilities.invokeLater(new Runnable() {
-//	    public void run() {
-			codeBox.getHighlighter().removeAllHighlights();
-			DefaultHighlightPainter painter = new DefaultHighlighter.DefaultHighlightPainter(Color.GRAY);
-			try {
-	            int start = codeBox.getLineStartOffset(computer.getCurrentLine());
-	            int end = codeBox.getLineEndOffset(computer.getCurrentLine());
-				codeBox.getHighlighter().addHighlight(start, end, painter);
-
-			} catch (BadLocationException e) {
-				e.printStackTrace();
-			}
-//	    }
-//	  });		
-		
-
+		codeBox.getHighlighter().removeAllHighlights();
+		DefaultHighlightPainter painter = new DefaultHighlighter.DefaultHighlightPainter(Color.GRAY);
+		try {
+            int start = codeBox.getLineStartOffset(computer.getCurrentLine());
+            int end = codeBox.getLineEndOffset(computer.getCurrentLine());
+			codeBox.getHighlighter().addHighlight(start, end, painter);
+		} catch (BadLocationException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public void displayValueCpuRegisters() {
