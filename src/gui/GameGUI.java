@@ -180,7 +180,6 @@ public class GameGUI extends JFrame {
 		panel.add(scrollPane, outputPanelConstraints);
 		panel.setSize(300, 300);
 		
-		
 		// Register values
 		this.textAreaRegisters = new ArrayList<JTextArea>();
 		JPanel register_panel = new JPanel();
@@ -203,7 +202,15 @@ public class GameGUI extends JFrame {
 			register_panel.add(register_value_box, registerPanelConstraints);
 			count++;
 		}
-
+		
+		// CPU cycle counter
+		JTextArea cpu_cycle_value_box = new JTextArea(" " + this.computer.getCPUCycleCount(), 1, 5);
+		this.textAreaRegisters.add(cpu_cycle_value_box);
+		cpu_cycle_value_box.setEditable(false);
+		cpu_cycle_value_box.setVisible(true);
+		JLabel cpu_cycle_message = new JLabel("CPU cycles:");
+		register_panel.add(cpu_cycle_message);
+		register_panel.add(cpu_cycle_value_box);
 		
 		// Add each panel to the JFrame with the 'right' GridBagConstraints
 		JPanel mainPanel = new JPanel(new GridBagLayout());
@@ -368,9 +375,10 @@ public class GameGUI extends JFrame {
 		ArrayList<Register> registers = this.computer.retrieveCurrentValueCPUs();
 		int index = 0;
 		for(Register register: registers) {
-			this.textAreaRegisters.get(index).setText("" + register.getValueInt());;
+			this.textAreaRegisters.get(index).setText("" + register.getValueInt());
 			index++;
 		}
+		this.textAreaRegisters.get(2).setText("" + this.computer.getCPUCycleCount());
 	}
 	
 	public void resetComputer() {

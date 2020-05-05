@@ -225,6 +225,10 @@ public class Computer {
 		return this.cpu_one;
 	}
 	
+	public int getCPUCycleCount() {
+		return this.cpu_cycle;
+	}
+	
 	public void resetComputer() {
 		this.cpu_one = new CPU_X86();
 		this.puzzle = new PuzzleSimpleOscillatingValue();
