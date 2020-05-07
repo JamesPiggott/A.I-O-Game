@@ -15,17 +15,22 @@ public class Computer {
 	public PuzzleSimpleOscillatingValue puzzle;
 	public int cpu_cycle;
 	public boolean runFast;
+	public boolean interrupted;
 	
 	public int currentLine;
 	public int endOfLoopLine;
 	public String[] instruction_lines;
 	
+	public Thread gameThread;
+	
 	public Computer() {
 		this.gameRunning = true;
+		this.interrupted = false;
 		this.cpu_one = new CPU_X86();
 		this.puzzle = new PuzzleSimpleOscillatingValue();
 		this.cpu_cycle = 0;
 		this.currentLine = 0;
+		this.gameThread = new Thread();
 	}
 	
 	/*
@@ -49,13 +54,19 @@ public class Computer {
 
 		if (singleLine == true && this.cpu_cycle < 1000) {
 			runSingleLineOfCode(instruction_lines);
-		} else if (this.cpu_cycle < 1000)  {
+		} else if (this.cpu_cycle < 1000)  {	
 			runContinousProgramLoop(instruction_lines, gameGUI, singleLine);
 		}
 	}
 	
 	public void runContinousProgramLoop(String[] instruction_lines, GameGUI gameGUI, boolean singleLine) {
 		while (currentLine <= instruction_lines.length && this.cpu_cycle < 1000) {
+			
+			if (this.interrupted = true) {
+				this.gameThread.interrupt();
+			}
+			
+			
 			runSingleLineOfCode(instruction_lines);
 			try {
 				if (this.runFast) {
@@ -67,6 +78,15 @@ public class Computer {
 				e.printStackTrace();
 			}			
 		}
+	}
+	
+	public void interruptProgram() {
+		this.interrupted = true;
+	}
+	
+	public void resumeProgram() {
+		this.interrupted = false;
+		this.gameThread.start();
 	}
 	
 	public void runSingleLineOfCode(String[] instruction_lines) {

@@ -78,6 +78,16 @@ public class GameGUI extends JFrame {
 	}
 	
 	public void buildGUI() {
+		
+        JButton menuButton = new JButton("Menu");
+        menuButton.addActionListener(new ActionListener()
+        {
+          public void actionPerformed(ActionEvent e)
+          {
+        	  SwitchToMainMenu(e);
+        	  started = false;
+          }
+        });
         
         JButton resetButton = new JButton("Reset");
         resetButton.addActionListener(new ActionListener()
@@ -94,8 +104,7 @@ public class GameGUI extends JFrame {
         {
           public void actionPerformed(ActionEvent e)
           {
-        	  SwitchToMainMenu(e);
-        	  System.out.println("You pressed pause");  
+        	  interruptProgram();
           }
         });
         
@@ -108,7 +117,7 @@ public class GameGUI extends JFrame {
         	  if (started == false) {
         		  setAllMarkPoints(codeBox.getText());
         		  started = true;
-        	  }       	  
+        	  }    
         	  sendCodetoGame(codeBox.getText(), true, false);
           }
         });
@@ -117,8 +126,12 @@ public class GameGUI extends JFrame {
         JButton runButton = new JButton("Run");
         runButton.addActionListener(new ActionListener() {
           public void actionPerformed(ActionEvent e) {
-        	        	  
-				new Thread(new Runnable() {
+        	  
+        	  if (started == true) {
+        		  resumeProgram();
+        	  }
+        	  
+        	  new Thread(new Runnable() {
 					public void run() {
 						setAllMarkPoints(codeBox.getText());
 						sendCodetoGame(codeBox.getText(), false, false);
@@ -131,6 +144,11 @@ public class GameGUI extends JFrame {
         JButton runFastButton = new JButton("Run Fast");
         runFastButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				
+        	  if (started == true) {
+        		  resumeProgram();
+        	  }
+				
 				new Thread(new Runnable() {
 					public void run() {
 						setAllMarkPoints(codeBox.getText());
@@ -142,6 +160,7 @@ public class GameGUI extends JFrame {
         
         // Control panel
         JPanel buttonPanel = new JPanel();
+        buttonPanel.add(menuButton);
         buttonPanel.add(resetButton);
         buttonPanel.add(pauseButton);
         buttonPanel.add(stepButton);
@@ -355,6 +374,14 @@ public class GameGUI extends JFrame {
 		this.output = this.values.getText() + " " + this.computer.retrieveCurrentValueCPUs().get(0).getValue();
 		this.values.setText(this.output);
 		this.values.updateUI();
+	}
+	
+	public void interruptProgram() {
+		this.computer.interruptProgram();
+	}
+	
+	public void resumeProgram() {
+		this.computer.resumeProgram();
 	}
 	
 
