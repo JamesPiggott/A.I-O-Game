@@ -130,17 +130,16 @@ public class GameGUI extends JFrame {
         JButton runButton = new JButton("Run");
         runButton.addActionListener(new ActionListener() {
           public void actionPerformed(ActionEvent e) {
-        	  
-        	  if (started == true) {
-        		  resumeProgram();
+        	  if (getInterrupted() == true) {
+        		  resumeProgram(false);
+        	  } else {
+            	  new Thread(new Runnable() {
+  					public void run() {
+  						setAllMarkPoints(codeBox.getText());
+  						sendCodetoGame(codeBox.getText(), false, false);
+  					}
+  				}).start();  
         	  }
-        	  
-        	  new Thread(new Runnable() {
-					public void run() {
-						setAllMarkPoints(codeBox.getText());
-						sendCodetoGame(codeBox.getText(), false, false);
-					}
-				}).start();
           }
         });
         
@@ -148,17 +147,16 @@ public class GameGUI extends JFrame {
         JButton runFastButton = new JButton("Run Fast");
         runFastButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				
-        	  if (started == true) {
-        		  resumeProgram();
-        	  }
-				
-				new Thread(new Runnable() {
+        	  if (getInterrupted() == true) {
+        		  resumeProgram(true);
+        	  } else {		
+  				new Thread(new Runnable() {
 					public void run() {
 						setAllMarkPoints(codeBox.getText());
 						sendCodetoGame(codeBox.getText(), false, true);
 					}
-				}).start();
+				}).start();  
+        	  }
 			}
         });
         
@@ -384,8 +382,16 @@ public class GameGUI extends JFrame {
 		this.computer.interruptProgram();
 	}
 	
-	public void resumeProgram() {
-		this.computer.resumeProgram();
+	public boolean getInterrupted() {
+		return this.computer.interrupted;
+	}
+	
+	public void resumeProgram(boolean runfast) {
+		if (runfast == true) {
+			this.computer.resumeProgramRunFast();
+		} else {
+			this.computer.resumeProgram();
+		}
 	}
 	
 

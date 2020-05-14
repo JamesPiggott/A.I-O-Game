@@ -63,12 +63,21 @@ public class Computer {
 		while (currentLine <= instruction_lines.length && this.cpu_cycle < 1000) {
 			
 			if (this.interrupted == true) {
-//				this.gameThread.interrupt();
-				break;
+				while (true) {
+					try {
+						Thread.sleep(5);
+						if (this.interrupted == false) {
+							break;
+						}
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
 			}
-			
-			
+						
 			runSingleLineOfCode(instruction_lines);
+			
 			try {
 				if (this.runFast) {
 					Thread.sleep(5);
@@ -87,7 +96,12 @@ public class Computer {
 	
 	public void resumeProgram() {
 		this.interrupted = false;
-		this.gameThread.start();
+		this.runFast = false;
+	}
+	
+	public void resumeProgramRunFast() {
+		this.interrupted = false;
+		this.runFast = true;
 	}
 	
 	public void runSingleLineOfCode(String[] instruction_lines) {
