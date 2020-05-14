@@ -104,7 +104,11 @@ public class GameGUI extends JFrame {
         {
           public void actionPerformed(ActionEvent e)
           {
-        	  interruptProgram();
+        	  new Thread(new Runnable() {
+					public void run() {
+						interruptProgram();
+					}
+				}).start();
           }
         });
         

@@ -62,8 +62,9 @@ public class Computer {
 	public void runContinousProgramLoop(String[] instruction_lines, GameGUI gameGUI, boolean singleLine) {
 		while (currentLine <= instruction_lines.length && this.cpu_cycle < 1000) {
 			
-			if (this.interrupted = true) {
-				this.gameThread.interrupt();
+			if (this.interrupted == true) {
+//				this.gameThread.interrupt();
+				break;
 			}
 			
 			
