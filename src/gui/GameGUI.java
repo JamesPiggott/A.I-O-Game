@@ -1,6 +1,7 @@
 package gui;
 
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
@@ -137,6 +138,7 @@ public class GameGUI extends JFrame {
   					public void run() {
   						setAllMarkPoints(codeBox.getText());
   						sendCodetoGame(codeBox.getText(), false, false);
+  						setStepToNotEditable();
   					}
   				}).start();  
         	  }
@@ -162,14 +164,14 @@ public class GameGUI extends JFrame {
         
         // Control panel
         JPanel buttonPanel = new JPanel();
+        buttonPanel.setName("buttonPanel");
         buttonPanel.add(menuButton);
         buttonPanel.add(resetButton);
         buttonPanel.add(pauseButton);
         buttonPanel.add(stepButton);
         buttonPanel.add(runButton);
         buttonPanel.add(runFastButton);
-        buttonPanel.setBackground(this.backgroundColor);
-        
+        buttonPanel.setBackground(this.backgroundColor);     
         
         // Code Panel
         JPanel codePanel = new JPanel(new GridBagLayout());
@@ -235,6 +237,7 @@ public class GameGUI extends JFrame {
 		
 		// Add each panel to the JFrame with the 'right' GridBagConstraints
 		JPanel mainPanel = new JPanel(new GridBagLayout());
+		mainPanel.setName("Main");
 		GridBagConstraints mainPanelConstraints = new GridBagConstraints();
 		mainPanelConstraints.gridx = 0;
 		mainPanelConstraints.gridy = 0;
@@ -393,6 +396,17 @@ public class GameGUI extends JFrame {
 			this.computer.resumeProgram();
 		}
 	}
+	
+	private void setStepToNotEditable() {                                
+	    Component[] comp = this.gamegui.getComponents();
+	    for (int i = 0; i < comp.length;i++) {
+	    	System.out.println(comp[i].getName());
+//	        if (comp[i].getName().contentEquals("Main")) {
+//	        	Component buttonPanel = comp[i].getComponentAt(0, 0);
+//	        	System.out.println(buttonPanel.getName());
+//	        }
+	    }
+	} 
 	
 
 	

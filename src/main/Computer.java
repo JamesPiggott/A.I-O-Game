@@ -60,6 +60,7 @@ public class Computer {
 	}
 	
 	public void runContinousProgramLoop(String[] instruction_lines, GameGUI gameGUI, boolean singleLine) {
+				
 		while (currentLine <= instruction_lines.length && this.cpu_cycle < 1000) {
 			
 			if (this.interrupted == true) {
@@ -125,6 +126,8 @@ public class Computer {
 		String[] instruction_elements = codeline.split("\\s+");
 		
 		switch (instruction_elements[0]) {
+		
+		// Basic operations
 		case "MOV":
 			this.cpu_one.performMove(instruction_elements);
 			break;
@@ -142,6 +145,8 @@ public class Computer {
 		case "OUT":
 			System.out.println("OUT");
 			break;
+			
+		// Test operation	
 		case "TEST":
 			this.cpu_one.performTest(instruction_elements);
 			break;
@@ -165,7 +170,8 @@ public class Computer {
 		case "SWP":
 			this.cpu_one.performSwap(instruction_elements);
 			break;	
-			
+		
+		// File and memory operations
 		case "FCH":
 			this.performFetch();
 			break;
@@ -181,6 +187,14 @@ public class Computer {
 		case "WIPE":
 			System.out.println("WIPE");
 			break;
+			
+		// Network operations
+		case "CONN":
+			System.out.println("CONN");
+			break;
+		case "DCON":
+			System.out.println("DCON");
+			break;	
 		}
 	}
 	
