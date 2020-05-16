@@ -61,7 +61,7 @@ public class Computer {
 	
 	public void runContinousProgramLoop(String[] instruction_lines, GameGUI gameGUI, boolean singleLine) {
 				
-		while (currentLine <= instruction_lines.length && this.cpu_cycle < 1000) {
+		while (currentLine <= instruction_lines.length && this.cpu_cycle < 1000 && this.gameRunning == true) {
 			
 			if (this.interrupted == true) {
 				while (true) {
@@ -264,9 +264,15 @@ public class Computer {
 	
 	public void compareResults() {	
 		if (this.puzzle.getValue(this.cpu_cycle).contentEquals(this.cpu_one.getValueRegisters())) {
-//			System.out.println("Values match");
+			System.out.println("Values match");
 		} else {
-//			System.out.println("Cycle: " + this.cpu_cycle + " "  + this.puzzle.getValue(this.cpu_cycle) + " " + this.cpu_one.getValueRegisters());
+			System.out.println("Values do not match");
+			if (this.cpu_cycle > 99) {
+				System.out.println("Game Over!");
+				this.gameRunning = false;
+			} else {
+				System.out.println("Values match");
+			}
 		}
 	}
 	
