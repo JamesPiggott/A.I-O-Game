@@ -43,13 +43,18 @@ public class GameGUI extends JFrame {
 	private JTextArea gameWorld;
 	private JTextArea description_box;
 	
-	private JPanel gamegui;
-	private JPanel puzzlemenu;
-	private JPanel mainmenu;
-	private JPanel settingsmenu;
-	private String puzzleName;
-	private Color backgroundColor;
+	public JPanel gamegui;
+	public JPanel puzzlemenu;
+	public JPanel mainmenu;
+	public JPanel settingsmenu;
+	public String puzzleName;
+	public Color backgroundColor;
 	
+	private MainMenuGUI menu;
+	private PuzzleMenuGUI puzzle;
+	private SettingsMenuGUI settings;
+	
+
 	private boolean started;
 	
 	public GameGUI(Computer computer) {
@@ -68,9 +73,16 @@ public class GameGUI extends JFrame {
 		this.mainmenu = new JPanel();
 		this.settingsmenu = new JPanel();
 		buildGUI();
-		buildPuzzleMenu();
-		buildMainMenu();
-		buildSettingsMenu();
+		
+		this.menu = new MainMenuGUI(this);
+		menu.buildMainMenu();
+		
+		this.puzzle = new PuzzleMenuGUI(this);
+		puzzle.buildPuzzleMenu();
+		
+		this.settings = new SettingsMenuGUI(this);
+		settings.buildSettingsMenu();
+		
 		this.add(mainmenu);
 		this.puzzleName = "";
         setVisible(true);
@@ -267,6 +279,7 @@ public class GameGUI extends JFrame {
 		JLabel description = new JLabel("Description");
 		this.description_box = new JTextArea("", 5, 40);
 		this.description_box.setEditable(false);
+		this.description_box.setText(this.computer.puzzle.getDescription());
 		JScrollPane scrollPaneDescription = new JScrollPane(this.description_box);
 		GridBagConstraints descriptionPanelConstraints = new GridBagConstraints();
 		descriptionPanelConstraints.gridx = 0;
@@ -284,87 +297,6 @@ public class GameGUI extends JFrame {
 		this.gamegui.add(mainPanel);
 		this.gamegui.setBackground(this.backgroundColor);
     }
-	
-	public void buildPuzzleMenu() {
-        JButton goBackButton = new JButton("Back");
-        goBackButton.addActionListener(new ActionListener()
-        {
-          public void actionPerformed(ActionEvent e)
-          {
-        	  SwitchFromPuzzleToMainMenu(e);
-          }
-        });
-        this.puzzlemenu.add(goBackButton);
-		
-        JButton goToGameButton = new JButton("Select Puzzle");
-        goToGameButton.addActionListener(new ActionListener()
-        {
-          public void actionPerformed(ActionEvent e)
-          {
-        	  SwitchToGameGUI(e);
-          }
-        });
-        this.puzzlemenu.add(goToGameButton);
-        
-        String[] puzzleNames = { "One", "Two", "Three", "Four", "Five" };
-        JComboBox<?> puzzles = new JComboBox<Object>(puzzleNames);
-
-        puzzles.addActionListener(new ActionListener()
-        {
-          public void actionPerformed(ActionEvent e)
-          {
-        	  selectPuzzle(e);
-          }
-        });
-        this.puzzlemenu.add(puzzles);
-        this.puzzlemenu.setBackground(this.backgroundColor);
-	}
-	
-	public void buildMainMenu() {
-        JButton goToGameButton = new JButton("Start Game");
-        goToGameButton.addActionListener(new ActionListener()
-        {
-          public void actionPerformed(ActionEvent e)
-          {
-        	  SwitchToPuzzleMenu(e);
-          }
-        });
-        this.mainmenu.add(goToGameButton);
-        
-        JButton goToSettingButton = new JButton("Settings");
-        goToSettingButton.addActionListener(new ActionListener()
-        {
-          public void actionPerformed(ActionEvent e)
-          {
-        	  SwitchToSettingsMenu(e);
-          }
-        });
-        this.mainmenu.add(goToSettingButton);
-        
-        JButton quitGameButton = new JButton("Quit Game");
-        quitGameButton.addActionListener(new ActionListener()
-        {
-          public void actionPerformed(ActionEvent e)
-          {
-        	  quitGame();
-          }
-        });
-        this.mainmenu.add(quitGameButton);
-        this.mainmenu.setBackground(this.backgroundColor);
-	}
-	
-	public void buildSettingsMenu() {
-        JButton goToMainMenuButton = new JButton("Main Menu");
-        goToMainMenuButton.addActionListener(new ActionListener()
-        {
-          public void actionPerformed(ActionEvent e)
-          {
-        	  SwitchFromSettingsToMainMenu(e);
-          }
-        });
-        this.settingsmenu.add(goToMainMenuButton);
-        this.settingsmenu.setBackground(this.backgroundColor);
-	}
 	
 	public void setAllMarkPoints(String code) {
 		this.computer.setAllJumpLines(code);
@@ -447,18 +379,14 @@ public class GameGUI extends JFrame {
 		highlightCodeLine(this.codeBox, this.computer);
 	}
 	
-	private void selectPuzzle(java.awt.event.ActionEvent evt) {
-	       JComboBox<?> cb = (JComboBox<?>) evt.getSource();
-	       String name = (String)cb.getSelectedItem();
-	       this.puzzleName = name;
-	}
+	
 	private void saveGame() throws FileNotFoundException {
 		try (PrintWriter out = new PrintWriter("solutions/" + this.puzzleName + ".txt")) {
 		    out.println(codeBox.getText());
 		}
 	}
 	
-	private void setCodeBox() {
+	public void setCodeBox() {
         if (Files.exists(Paths.get("solutions/" + this.puzzleName + ".txt"))) {
             StringBuilder contentBuilder = new StringBuilder();
 	        try (Stream<String> stream = Files.lines( Paths.get("solutions/" + this.puzzleName + ".txt"), StandardCharsets.UTF_8)) 
@@ -488,49 +416,5 @@ public class GameGUI extends JFrame {
 	    this.mainmenu.setVisible(true);
 	    validate(); //updates frame with new panel
 	} 
-	
-	private void SwitchToGameGUI(java.awt.event.ActionEvent evt) {
-		setCodeBox();
-		this.puzzlemenu.setVisible(false);
-	    getContentPane().removeAll(); 
-	    getContentPane().add(this.gamegui); //adds desired panel to frame
-	    this.gamegui.setVisible(true);
-	    validate(); //updates frame with new panel
-	} 
-	
-	private void SwitchFromPuzzleToMainMenu(java.awt.event.ActionEvent evt) {
-		this.puzzlemenu.setVisible(false);
-	    getContentPane().removeAll(); 
-	    getContentPane().add(this.mainmenu); //adds desired panel to frame
-	    this.mainmenu.setVisible(true);
-	    validate(); //updates frame with new panel
-	} 
-	
-	private void SwitchToPuzzleMenu(java.awt.event.ActionEvent evt) {
-		this.mainmenu.setVisible(false);
-	    getContentPane().removeAll(); 
-	    getContentPane().add(this.puzzlemenu); //adds desired panel to frame
-	    this.puzzlemenu.setVisible(true);
-	    validate(); //updates frame with new panel
-	}
-	
-	private void SwitchToSettingsMenu(java.awt.event.ActionEvent evt) {
-		this.mainmenu.setVisible(false);
-	    getContentPane().removeAll(); 
-	    getContentPane().add(this.settingsmenu); //adds desired panel to frame
-	    this.settingsmenu.setVisible(true);
-	    validate(); //updates frame with new panel
-	}
-	
-	private void SwitchFromSettingsToMainMenu(java.awt.event.ActionEvent evt) {
-		this.settingsmenu.setVisible(false);
-	    getContentPane().removeAll(); 
-	    getContentPane().add(this.mainmenu); //adds desired panel to frame
-	    this.mainmenu.setVisible(true);
-	    validate(); //updates frame with new panel
-	}
-	
-	private void quitGame() {
-		System.exit(0);
-	}
+
 }
