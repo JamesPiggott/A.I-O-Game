@@ -28,9 +28,9 @@ public class SettingsMenuGUI {
 	private void SwitchFromSettingsToMainMenu(java.awt.event.ActionEvent evt) {
 		this.gameGUI.settingsmenu.setVisible(false);
 		this.gameGUI.getContentPane().removeAll(); 
-		this.gameGUI.getContentPane().add(this.gameGUI.mainmenu); //adds desired panel to frame
+		this.gameGUI.getContentPane().add(this.gameGUI.mainmenu);
 		this.gameGUI.mainmenu.setVisible(true);
-	    this.gameGUI.validate(); //updates frame with new panel
+	    this.gameGUI.validate();
 	}
 
 }

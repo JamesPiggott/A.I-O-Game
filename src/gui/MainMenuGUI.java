@@ -49,17 +49,17 @@ public class MainMenuGUI {
 	private void SwitchToPuzzleMenu(java.awt.event.ActionEvent evt) {
 		this.gameGUI.mainmenu.setVisible(false);
 		this.gameGUI.getContentPane().removeAll(); 
-		this.gameGUI.getContentPane().add(this.gameGUI.puzzlemenu); //adds desired panel to frame
+		this.gameGUI.getContentPane().add(this.gameGUI.puzzlemenu);
 		this.gameGUI.puzzlemenu.setVisible(true);
-	    this.gameGUI.validate(); //updates frame with new panel
+	    this.gameGUI.validate();
 	}
 	
 	private void SwitchToSettingsMenu(java.awt.event.ActionEvent evt) {
 		this.gameGUI.mainmenu.setVisible(false);
 		this.gameGUI.getContentPane().removeAll(); 
-		this.gameGUI.getContentPane().add(this.gameGUI.settingsmenu); //adds desired panel to frame
+		this.gameGUI.getContentPane().add(this.gameGUI.settingsmenu);
 		this.gameGUI.settingsmenu.setVisible(true);
-		this.gameGUI.validate(); //updates frame with new panel
+		this.gameGUI.validate(); 
 	}
 	
 	private void quitGame() {
