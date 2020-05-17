@@ -1,5 +1,8 @@
 package gui;
 
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.GridBagConstraints;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -15,6 +18,8 @@ public class MainMenuGUI {
 
 	public void buildMainMenu() {
         JButton goToGameButton = new JButton("Start Game");
+        goToGameButton.setPreferredSize(new Dimension(300, 150));
+        goToGameButton.setBackground(GUIMarkUp.buttonColor);
         goToGameButton.addActionListener(new ActionListener()
         {
           public void actionPerformed(ActionEvent e)
@@ -22,9 +27,11 @@ public class MainMenuGUI {
         	  SwitchToPuzzleMenu(e);
           }
         });
-        this.gameGUI.mainmenu.add(goToGameButton);
+
         
         JButton goToSettingButton = new JButton("Settings");
+        goToSettingButton.setPreferredSize(new Dimension(300, 150));
+        goToSettingButton.setBackground(GUIMarkUp.buttonColor);
         goToSettingButton.addActionListener(new ActionListener()
         {
           public void actionPerformed(ActionEvent e)
@@ -32,9 +39,10 @@ public class MainMenuGUI {
         	  SwitchToSettingsMenu(e);
           }
         });
-        this.gameGUI.mainmenu.add(goToSettingButton);
         
         JButton quitGameButton = new JButton("Quit Game");
+        quitGameButton.setPreferredSize(new Dimension(300, 150));
+        quitGameButton.setBackground(GUIMarkUp.buttonColor);
         quitGameButton.addActionListener(new ActionListener()
         {
           public void actionPerformed(ActionEvent e)
@@ -42,7 +50,18 @@ public class MainMenuGUI {
         	  quitGame();
           }
         });
-        this.gameGUI.mainmenu.add(quitGameButton);
+        
+		GridBagConstraints outputPanelConstraints = new GridBagConstraints();
+		outputPanelConstraints.gridx = 0;
+		outputPanelConstraints.gridy = 0;
+		this.gameGUI.mainmenu.add(goToGameButton, outputPanelConstraints);
+		outputPanelConstraints.gridx = 0;
+		outputPanelConstraints.gridy = 1;
+		this.gameGUI.mainmenu.add(goToSettingButton, outputPanelConstraints);
+		outputPanelConstraints.gridx = 0;
+		outputPanelConstraints.gridy = 2;
+		this.gameGUI.mainmenu.add(quitGameButton, outputPanelConstraints);
+
         this.gameGUI.mainmenu.setBackground(this.gameGUI.backgroundColor);
 	}
 	

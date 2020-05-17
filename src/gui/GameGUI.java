@@ -69,8 +69,8 @@ public class GameGUI extends JFrame {
 		
 		this.gamegui = new JPanel();
 		this.puzzlemenu = new JPanel();
-		this.mainmenu = new JPanel();
-		this.settingsmenu = new JPanel();
+		this.mainmenu = new JPanel(new GridBagLayout());
+		this.settingsmenu = new JPanel(new GridBagLayout());
 		buildGUI();
 		
 		this.menu = new MainMenuGUI(this);
