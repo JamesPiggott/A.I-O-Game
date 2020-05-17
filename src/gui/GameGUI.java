@@ -312,6 +312,11 @@ public class GameGUI extends JFrame {
 		this.values.updateUI();
 	}
 	
+	public void displayPuzzleOutcome(String message) {
+		this.values.setText(message);
+		this.values.updateUI();
+	}
+	
 	public void interruptProgram() {
 		this.computer.interruptProgram();
 	}
@@ -388,14 +393,15 @@ public class GameGUI extends JFrame {
 	public void setCodeBox() {
         if (Files.exists(Paths.get("solutions/" + this.puzzleName + ".txt"))) {
             StringBuilder contentBuilder = new StringBuilder();
-	        try (Stream<String> stream = Files.lines( Paths.get("solutions/" + this.puzzleName + ".txt"), StandardCharsets.UTF_8)) 
-	        {
-	            stream.forEach(s -> contentBuilder.append(s).append("\n"));
-	        }
-	        catch (IOException e) 
-	        {
+	        try (Stream<String> stream = Files.lines(Paths.get("solutions/" + this.puzzleName + ".txt"), StandardCharsets.UTF_8)) {
+	            stream.forEach(s -> contentBuilder.append(s).append("\n"));  
+	        }        
+	        catch (IOException e) {
 	            e.printStackTrace();
 	        }
+
+	        contentBuilder.delete(contentBuilder.lastIndexOf("\n"), contentBuilder.lastIndexOf("\n")+1);
+	        
 	        this.codeBox.setText(contentBuilder.toString());
 	        highlightCodeLine(this.codeBox, this.computer);
 	        this.codeBox.setCaretPosition(0);
@@ -410,10 +416,10 @@ public class GameGUI extends JFrame {
 			e.printStackTrace();
 		}
 		this.gamegui.setVisible(false);
-	    getContentPane().removeAll(); //gets rid of first panel
-	    getContentPane().add(this.mainmenu); //adds desired panel to frame
+	    getContentPane().removeAll(); 
+	    getContentPane().add(this.mainmenu); 
 	    this.mainmenu.setVisible(true);
-	    validate(); //updates frame with new panel
+	    validate(); 
 	} 
 
 }

@@ -16,6 +16,7 @@ public class Computer {
 	public int cpu_cycle;
 	public boolean runFast;
 	public boolean interrupted;
+	public boolean solutionIncorrect;
 	
 	public int currentLine;
 	public int endOfLoopLine;
@@ -31,6 +32,7 @@ public class Computer {
 		this.cpu_cycle = 0;
 		this.currentLine = 0;
 		this.gameThread = new Thread();
+		this.solutionIncorrect = false;
 	}
 	
 	/*
@@ -264,15 +266,15 @@ public class Computer {
 	
 	public void compareResults() {	
 		if (this.puzzle.getValue(this.cpu_cycle).contentEquals(this.cpu_one.getValueRegisters())) {
-			System.out.println("Values match");
+			if (this.cpu_cycle == 999 && this.solutionIncorrect == false) {
+				this.gui.displayPuzzleOutcome("Puzzle solved");
+			} 
 		} else {
-			System.out.println("Values do not match");
+			this.solutionIncorrect = true;
 			if (this.cpu_cycle > 99) {
-				System.out.println("Game Over!");
+				this.gui.displayPuzzleOutcome("Game Over!");
 				this.gameRunning = false;
-			} else {
-				System.out.println("Values match");
-			}
+			} 
 		}
 	}
 	
@@ -289,6 +291,7 @@ public class Computer {
 		this.puzzle = new PuzzleSimpleOscillatingValue();
 		this.cpu_cycle = 0;
 		this.currentLine = 0;
+		this.gameRunning = true;
 	}
 	
 	public int getCurrentLine() {
