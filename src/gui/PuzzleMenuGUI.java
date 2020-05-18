@@ -1,5 +1,7 @@
 package gui;
 
+import java.awt.Dimension;
+import java.awt.GridBagConstraints;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -17,28 +19,44 @@ public class PuzzleMenuGUI {
 
 	public void buildPuzzleMenu() {
 		JButton goBackButton = new JButton("Back");
+		goBackButton.setPreferredSize(new Dimension(300, 150));
+		goBackButton.setBackground(GUIMarkUp.buttonColor);
         goBackButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				SwitchFromPuzzleToMainMenu(e);
 			}
         });
-        this.gameGUI.puzzlemenu.add(goBackButton);
 		
         JButton goToGameButton = new JButton("Select Puzzle");
+        goToGameButton.setPreferredSize(new Dimension(300, 150));
+        goToGameButton.setBackground(GUIMarkUp.buttonColor);
         goToGameButton.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
         		SwitchToGameGUI(e);
         	}
         });
-        this.gameGUI.puzzlemenu.add(goToGameButton);
         
         JComboBox<?> puzzles = new JComboBox<Object>(puzzleNames);
+        puzzles.setPreferredSize(new Dimension(300, 30));
+        puzzles.setBackground(GUIMarkUp.buttonColor);
         puzzles.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
         		selectPuzzle(e);
         	}
         });
-        this.gameGUI.puzzlemenu.add(puzzles);
+        
+		GridBagConstraints outputPanelConstraints = new GridBagConstraints();
+		outputPanelConstraints.gridx = 0;
+		outputPanelConstraints.gridy = 0;
+		this.gameGUI.puzzlemenu.add(goBackButton, outputPanelConstraints);
+		outputPanelConstraints.gridx = 0;
+		outputPanelConstraints.gridy = 1;
+		this.gameGUI.puzzlemenu.add(goToGameButton, outputPanelConstraints);
+		outputPanelConstraints.gridx = 0;
+		outputPanelConstraints.gridy = 2;
+		this.gameGUI.puzzlemenu.add(puzzles, outputPanelConstraints);
+        
+
         this.gameGUI.puzzlemenu.setBackground(this.gameGUI.backgroundColor);
 	}
 	

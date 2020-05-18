@@ -68,7 +68,7 @@ public class GameGUI extends JFrame {
 		this.setResizable(true);
 		
 		this.gamegui = new JPanel();
-		this.puzzlemenu = new JPanel();
+		this.puzzlemenu = new JPanel(new GridBagLayout());
 		this.mainmenu = new JPanel(new GridBagLayout());
 		this.settingsmenu = new JPanel(new GridBagLayout());
 		buildGUI();
@@ -91,7 +91,9 @@ public class GameGUI extends JFrame {
 	
 	public void buildGUI() {
 		
+		// Return back to main menu
         JButton menuButton = new JButton("Menu");
+        menuButton.setBackground(GUIMarkUp.buttonColor);
         menuButton.addActionListener(new ActionListener()
         {
           public void actionPerformed(ActionEvent e)
@@ -101,7 +103,9 @@ public class GameGUI extends JFrame {
           }
         });
         
+        // Reset button stops a game and returns all start values
         JButton resetButton = new JButton("Reset");
+        resetButton.setBackground(GUIMarkUp.buttonColor);
         resetButton.addActionListener(new ActionListener()
         {
           public void actionPerformed(ActionEvent e)
@@ -111,7 +115,9 @@ public class GameGUI extends JFrame {
           }
         });
         
+        // Pause button interrupts a running game
         JButton pauseButton = new JButton("Pause"); 
+        pauseButton.setBackground(GUIMarkUp.buttonColor);
         pauseButton.addActionListener(new ActionListener()
         {
           public void actionPerformed(ActionEvent e)
@@ -125,7 +131,8 @@ public class GameGUI extends JFrame {
         });
         
         // Advance one cycle (perform one line of code)
-        JButton stepButton = new JButton("Step");   
+        JButton stepButton = new JButton("Step"); 
+        stepButton.setBackground(GUIMarkUp.buttonColor);
         stepButton.addActionListener(new ActionListener()
         {
           public void actionPerformed(ActionEvent e)
@@ -140,6 +147,7 @@ public class GameGUI extends JFrame {
         
         // Run code indefinitely, but slow enough to observe
         JButton runButton = new JButton("Run");
+        runButton.setBackground(GUIMarkUp.buttonColor);
         runButton.addActionListener(new ActionListener() {
           public void actionPerformed(ActionEvent e) {
         	  if (getInterrupted() == true) {
@@ -158,6 +166,7 @@ public class GameGUI extends JFrame {
         
         // Run code indefinitely, but at a much faster rate to quickly pass all tests.
         JButton runFastButton = new JButton("Run Fast");
+        runFastButton.setBackground(GUIMarkUp.buttonColor);
         runFastButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
         	  if (getInterrupted() == true) {
@@ -265,8 +274,9 @@ public class GameGUI extends JFrame {
 		mainPanel.setBackground(this.backgroundColor);
 		
 		// gameworld
-        this.gameWorld = new JTextArea("", 15, 25);
-        this.gameWorld.setEditable(true);
+        this.gameWorld = new JTextArea("", 15, 40);
+        this.gameWorld.setEditable(false);
+        this.gameWorld.setSize(500, 500);
         JPanel gameworld_panel = new JPanel();
         gameworld_panel.add(gameWorld);
 		mainPanelConstraints.gridx = 1;
