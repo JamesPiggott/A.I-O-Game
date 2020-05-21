@@ -90,6 +90,121 @@ public class GameGUI extends JFrame {
 	}
 	
 	public void buildGUI() {
+		       
+        // Code Panel
+        JPanel codePanel = new JPanel(new GridBagLayout());
+        JLabel codeBoxInformation = new JLabel("Enter code:");
+     	codeBox = new JTextArea("", 15, 40);
+        codeBox.setEditable(true);
+        this.pane1 = new JScrollPane(codeBox);
+        GridBagConstraints codePanelConstraints = new GridBagConstraints();
+        codePanelConstraints.gridx = 0;
+        codePanelConstraints.gridy = 0;
+        codePanel.add(codeBoxInformation, codePanelConstraints);
+        codePanelConstraints.gridx = 0;
+        codePanelConstraints.gridy = 1;
+        codePanel.add(this.pane1, codePanelConstraints);
+        
+        // Output panel
+        JPanel panel = new JPanel(new GridBagLayout());
+        panel.setBackground(this.backgroundColor);
+		JLabel value_message = new JLabel("Values:");
+		this.values = new JTextArea("", 5, 40);
+		this.values.setEditable(false);
+		JScrollPane scrollPane = new JScrollPane(this.values);
+		GridBagConstraints outputPanelConstraints = new GridBagConstraints();
+		outputPanelConstraints.gridx = 0;
+		outputPanelConstraints.gridy = 0;
+		panel.add(value_message, outputPanelConstraints);
+		outputPanelConstraints.gridx = 0;
+		outputPanelConstraints.gridy = 1;
+		panel.add(scrollPane, outputPanelConstraints);
+		panel.setSize(300, 300);
+		
+		// Register values
+		this.textAreaRegisters = new ArrayList<JTextArea>();
+		JPanel register_panel = new JPanel();
+		register_panel.setBackground(this.backgroundColor);
+		JLabel register_message = new JLabel("Registers:");
+		register_panel.add(register_message);
+		ArrayList<Register> registers = this.computer.getCPU().getRegisters();
+		
+		int count = 0;
+		GridBagConstraints registerPanelConstraints = new GridBagConstraints();
+		registerPanelConstraints.gridx = 0;
+		registerPanelConstraints.gridy = count;
+		registerPanelConstraints.gridwidth = 1;
+		
+		for(Register register : registers) {
+			JTextArea register_value_box = new JTextArea(" " + register.getRegisterName() + " : " + register.getValue(), 1, 5);
+			this.textAreaRegisters.add(register_value_box);
+			register_value_box.setEditable(false);
+			register_value_box.setVisible(true);
+			register_panel.add(register_value_box, registerPanelConstraints);
+			count++;
+		}
+		
+
+		
+		// Add each panel to the JFrame with the 'right' GridBagConstraints
+		JPanel mainPanel = new JPanel(new GridBagLayout());
+		mainPanel.setName("Main");
+		GridBagConstraints mainPanelConstraints = new GridBagConstraints();
+//		mainPanelConstraints.gridx = 0;
+//		mainPanelConstraints.gridy = 0;
+//		mainPanel.add(createButtonPanel(), mainPanelConstraints);
+		mainPanelConstraints.gridx = 0;
+		mainPanelConstraints.gridy = 1;
+		mainPanel.add(codePanel, mainPanelConstraints);
+		mainPanelConstraints.gridx = 0;
+		mainPanelConstraints.gridy = 3;
+		mainPanel.add(panel, mainPanelConstraints);
+		mainPanelConstraints.gridx = 0;
+		mainPanelConstraints.gridy = 2;
+		mainPanel.add(register_panel, mainPanelConstraints);
+		mainPanel.setBackground(this.backgroundColor);
+		
+		// gameworld
+        this.gameWorld = new JTextArea("", 15, 40);
+        this.gameWorld.setEditable(false);
+        this.gameWorld.setSize(800, 500);
+        JPanel gameworld_panel = new JPanel();
+        gameworld_panel.add(gameWorld);
+		
+		// description box
+        JPanel description_panel = new JPanel(new GridBagLayout());
+		JLabel description = new JLabel("Description");
+		this.description_box = new JTextArea("", 5, 40);
+		this.description_box.setSize(800, 500);
+		this.description_box.setEditable(false);
+		this.description_box.setLineWrap(true);
+		this.description_box.setText(this.computer.puzzle.getDescription());
+		GridBagConstraints descriptionPanelConstraints = new GridBagConstraints();
+		descriptionPanelConstraints.gridx = 0;
+		descriptionPanelConstraints.gridy = 0;
+		description_panel.add(description, descriptionPanelConstraints);
+		descriptionPanelConstraints.gridx = 0;
+		descriptionPanelConstraints.gridy = 1;
+		description_panel.add(this.description_box, descriptionPanelConstraints);
+		description_panel.setSize(300, 300);
+		
+		// Set layout of the right side
+		mainPanelConstraints.gridx = 1;
+		mainPanelConstraints.gridy = 1;
+		mainPanel.add(gameworld_panel, mainPanelConstraints);
+		mainPanelConstraints.gridx = 1;
+		mainPanelConstraints.gridy = 2;
+		mainPanel.add(createButtonPanel(), mainPanelConstraints);
+		mainPanelConstraints.gridx = 1;
+		mainPanelConstraints.gridy = 3;
+		mainPanel.add(description_panel, mainPanelConstraints);
+		mainPanel.setVisible(true);
+		
+		this.gamegui.add(mainPanel);
+		this.gamegui.setBackground(this.backgroundColor);
+    }
+	
+	public JPanel createButtonPanel() {
 		
 		// Return back to main menu
         JButton menuButton = new JButton("Menu");
@@ -193,58 +308,11 @@ public class GameGUI extends JFrame {
         buttonPanel.add(runFastButton);
         buttonPanel.setBackground(this.backgroundColor);     
         
-        // Code Panel
-        JPanel codePanel = new JPanel(new GridBagLayout());
-        JLabel codeBoxInformation = new JLabel("Enter code:");
-     	codeBox = new JTextArea("", 15, 40);
-        codeBox.setEditable(true);
-        this.pane1 = new JScrollPane(codeBox);
-        GridBagConstraints codePanelConstraints = new GridBagConstraints();
-        codePanelConstraints.gridx = 0;
-        codePanelConstraints.gridy = 0;
-        codePanel.add(codeBoxInformation, codePanelConstraints);
-        codePanelConstraints.gridx = 0;
-        codePanelConstraints.gridy = 1;
-        codePanel.add(this.pane1, codePanelConstraints);
-        
-        // Output panel
-        JPanel panel = new JPanel(new GridBagLayout());
-        panel.setBackground(this.backgroundColor);
-		JLabel value_message = new JLabel("Values:");
-		this.values = new JTextArea("", 5, 40);
-		this.values.setEditable(false);
-		JScrollPane scrollPane = new JScrollPane(this.values);
-		GridBagConstraints outputPanelConstraints = new GridBagConstraints();
-		outputPanelConstraints.gridx = 0;
-		outputPanelConstraints.gridy = 0;
-		panel.add(value_message, outputPanelConstraints);
-		outputPanelConstraints.gridx = 0;
-		outputPanelConstraints.gridy = 1;
-		panel.add(scrollPane, outputPanelConstraints);
-		panel.setSize(300, 300);
-		
-		// Register values
-		this.textAreaRegisters = new ArrayList<JTextArea>();
-		JPanel register_panel = new JPanel();
-		register_panel.setBackground(this.backgroundColor);
-		JLabel register_message = new JLabel("Registers:");
-		register_panel.add(register_message);
-		ArrayList<Register> registers = this.computer.getCPU().getRegisters();
-		
-		int count = 0;
-		GridBagConstraints registerPanelConstraints = new GridBagConstraints();
-		registerPanelConstraints.gridx = 0;
-		registerPanelConstraints.gridy = count;
-		registerPanelConstraints.gridwidth = 1;
-		
-		for(Register register : registers) {
-			JTextArea register_value_box = new JTextArea(" " + register.getRegisterName() + " : " + register.getValue(), 1, 5);
-			this.textAreaRegisters.add(register_value_box);
-			register_value_box.setEditable(false);
-			register_value_box.setVisible(true);
-			register_panel.add(register_value_box, registerPanelConstraints);
-			count++;
-		}
+		return buttonPanel;
+	}
+	
+	public JPanel createResourceWidgets() {
+		JPanel resource_panel = new JPanel();
 		
 		// CPU cycle counter
 		JTextArea cpu_cycle_value_box = new JTextArea(" " + this.computer.getCPUCycleCount(), 1, 5);
@@ -252,60 +320,21 @@ public class GameGUI extends JFrame {
 		cpu_cycle_value_box.setEditable(false);
 		cpu_cycle_value_box.setVisible(true);
 		JLabel cpu_cycle_message = new JLabel("CPU cycles:");
-		register_panel.add(cpu_cycle_message);
-		register_panel.add(cpu_cycle_value_box);
+	
+		JTextArea lines_of_code_value_box = new JTextArea(" " + this.computer.instruction_lines.length, 1, 5);
+		this.textAreaRegisters.add(lines_of_code_value_box);
+		lines_of_code_value_box.setEditable(false);
+		lines_of_code_value_box.setVisible(true);
+		JLabel number_of_lines_of_code_message = new JLabel("# lines of code:");
 		
-		// Add each panel to the JFrame with the 'right' GridBagConstraints
-		JPanel mainPanel = new JPanel(new GridBagLayout());
-		mainPanel.setName("Main");
-		GridBagConstraints mainPanelConstraints = new GridBagConstraints();
-		mainPanelConstraints.gridx = 0;
-		mainPanelConstraints.gridy = 0;
-		mainPanel.add(buttonPanel, mainPanelConstraints);
-		mainPanelConstraints.gridx = 0;
-		mainPanelConstraints.gridy = 1;
-		mainPanel.add(codePanel, mainPanelConstraints);
-		mainPanelConstraints.gridx = 0;
-		mainPanelConstraints.gridy = 3;
-		mainPanel.add(panel, mainPanelConstraints);
-		mainPanelConstraints.gridx = 0;
-		mainPanelConstraints.gridy = 2;
-		mainPanel.add(register_panel, mainPanelConstraints);
-		mainPanel.setBackground(this.backgroundColor);
+		resource_panel.add(cpu_cycle_message);
+		resource_panel.add(cpu_cycle_value_box);
 		
-		// gameworld
-        this.gameWorld = new JTextArea("", 15, 40);
-        this.gameWorld.setEditable(false);
-        this.gameWorld.setSize(500, 500);
-        JPanel gameworld_panel = new JPanel();
-        gameworld_panel.add(gameWorld);
-		mainPanelConstraints.gridx = 1;
-		mainPanelConstraints.gridy = 1;
-		mainPanel.add(gameworld_panel, mainPanelConstraints);
+		resource_panel.add(lines_of_code_value_box);
+		resource_panel.add(number_of_lines_of_code_message);
+		return resource_panel;
 		
-		// description box
-        JPanel description_panel = new JPanel(new GridBagLayout());
-		JLabel description = new JLabel("Description");
-		this.description_box = new JTextArea("", 5, 40);
-		this.description_box.setEditable(false);
-		this.description_box.setText(this.computer.puzzle.getDescription());
-		JScrollPane scrollPaneDescription = new JScrollPane(this.description_box);
-		GridBagConstraints descriptionPanelConstraints = new GridBagConstraints();
-		descriptionPanelConstraints.gridx = 0;
-		descriptionPanelConstraints.gridy = 0;
-		description_panel.add(description, descriptionPanelConstraints);
-		descriptionPanelConstraints.gridx = 0;
-		descriptionPanelConstraints.gridy = 1;
-		description_panel.add(scrollPaneDescription, descriptionPanelConstraints);
-		description_panel.setSize(300, 300);
-		
-		mainPanelConstraints.gridx = 1;
-		mainPanelConstraints.gridy = 3;
-		mainPanel.add(description_panel, mainPanelConstraints);
-		mainPanel.setVisible(true);
-		this.gamegui.add(mainPanel);
-		this.gamegui.setBackground(this.backgroundColor);
-    }
+	}
 	
 	public void setAllMarkPoints(String code) {
 		this.computer.setAllJumpLines(code);
@@ -375,7 +404,7 @@ public class GameGUI extends JFrame {
 			this.textAreaRegisters.get(index).setText("" + register.getValueInt());
 			index++;
 		}
-		this.textAreaRegisters.get(2).setText("" + this.computer.getCPUCycleCount());
+//		this.textAreaRegisters.get(2).setText("" + this.computer.getCPUCycleCount());
 	}
 	
 	public void resetComputer() {
