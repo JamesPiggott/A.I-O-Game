@@ -39,6 +39,7 @@ public class GameGUI extends JFrame {
     private String output;
     public Thread queryThread;
     private ArrayList<JTextArea> textAreaRegisters;
+    private JTextArea textAreaCpyCycles;
 	private JTextArea gameWorld;
 	private JTextArea description_box;
 	
@@ -53,6 +54,7 @@ public class GameGUI extends JFrame {
 	private PuzzleMenuGUI puzzle;
 	private SettingsMenuGUI settings;
 	
+	public JPanel resourcePanel;
 
 	private boolean started;
 	
@@ -104,6 +106,9 @@ public class GameGUI extends JFrame {
         codePanelConstraints.gridx = 0;
         codePanelConstraints.gridy = 1;
         codePanel.add(this.pane1, codePanelConstraints);
+        codePanelConstraints.gridx = 1;
+        codePanelConstraints.gridy = 1;
+        codePanel.add(createRegisterPanel(), codePanelConstraints);
         
         // Output panel
         JPanel panel = new JPanel(new GridBagLayout());
@@ -121,47 +126,17 @@ public class GameGUI extends JFrame {
 		panel.add(scrollPane, outputPanelConstraints);
 		panel.setSize(300, 300);
 		
-		// Register values
-		this.textAreaRegisters = new ArrayList<JTextArea>();
-		JPanel register_panel = new JPanel();
-		register_panel.setBackground(this.backgroundColor);
-		JLabel register_message = new JLabel("Registers:");
-		register_panel.add(register_message);
-		ArrayList<Register> registers = this.computer.getCPU().getRegisters();
-		
-		int count = 0;
-		GridBagConstraints registerPanelConstraints = new GridBagConstraints();
-		registerPanelConstraints.gridx = 0;
-		registerPanelConstraints.gridy = count;
-		registerPanelConstraints.gridwidth = 1;
-		
-		for(Register register : registers) {
-			JTextArea register_value_box = new JTextArea(" " + register.getRegisterName() + " : " + register.getValue(), 1, 5);
-			this.textAreaRegisters.add(register_value_box);
-			register_value_box.setEditable(false);
-			register_value_box.setVisible(true);
-			register_panel.add(register_value_box, registerPanelConstraints);
-			count++;
-		}
-		
-
 		
 		// Add each panel to the JFrame with the 'right' GridBagConstraints
 		JPanel mainPanel = new JPanel(new GridBagLayout());
 		mainPanel.setName("Main");
 		GridBagConstraints mainPanelConstraints = new GridBagConstraints();
-//		mainPanelConstraints.gridx = 0;
-//		mainPanelConstraints.gridy = 0;
-//		mainPanel.add(createButtonPanel(), mainPanelConstraints);
 		mainPanelConstraints.gridx = 0;
 		mainPanelConstraints.gridy = 1;
 		mainPanel.add(codePanel, mainPanelConstraints);
 		mainPanelConstraints.gridx = 0;
-		mainPanelConstraints.gridy = 3;
-		mainPanel.add(panel, mainPanelConstraints);
-		mainPanelConstraints.gridx = 0;
 		mainPanelConstraints.gridy = 2;
-		mainPanel.add(register_panel, mainPanelConstraints);
+		mainPanel.add(panel, mainPanelConstraints);
 		mainPanel.setBackground(this.backgroundColor);
 		
 		// gameworld
@@ -195,14 +170,41 @@ public class GameGUI extends JFrame {
 		mainPanelConstraints.gridx = 1;
 		mainPanelConstraints.gridy = 2;
 		mainPanel.add(createButtonPanel(), mainPanelConstraints);
+//		mainPanelConstraints.gridx = 2;
+//		mainPanelConstraints.gridy = 2;
+////		this.resourcePanel = createResourceWidgets();
+//		mainPanel.add(createResourceWidgets(), mainPanelConstraints);
+
+		
 		mainPanelConstraints.gridx = 1;
-		mainPanelConstraints.gridy = 3;
+		mainPanelConstraints.gridy = 4;
 		mainPanel.add(description_panel, mainPanelConstraints);
 		mainPanel.setVisible(true);
 		
 		this.gamegui.add(mainPanel);
 		this.gamegui.setBackground(this.backgroundColor);
     }
+	
+	public JPanel createRegisterPanel() {
+		this.textAreaRegisters = new ArrayList<JTextArea>();
+		JPanel register_panel = new JPanel(new GridBagLayout());
+		ArrayList<Register> registers = this.computer.getCPU().getRegisters();
+		
+		int count = 1;
+		GridBagConstraints registerPanelConstraints = new GridBagConstraints();	
+		for(Register register : registers) {			
+			registerPanelConstraints.gridx = 0;
+			registerPanelConstraints.gridy = count;
+			JTextArea register_value_box = new JTextArea(" " + register.getRegisterName() + " : " + register.getValue(), 1, 5);
+			this.textAreaRegisters.add(register_value_box);
+			register_value_box.setEditable(false);
+			register_value_box.setVisible(true);
+			register_panel.add(register_value_box, registerPanelConstraints);
+			count++;
+		}
+		
+		return register_panel;
+	}
 	
 	public JPanel createButtonPanel() {
 		
@@ -306,6 +308,7 @@ public class GameGUI extends JFrame {
         buttonPanel.add(stepButton);
         buttonPanel.add(runButton);
         buttonPanel.add(runFastButton);
+        buttonPanel.add(createResourceWidgets());
         buttonPanel.setBackground(this.backgroundColor);     
         
 		return buttonPanel;
@@ -313,25 +316,30 @@ public class GameGUI extends JFrame {
 	
 	public JPanel createResourceWidgets() {
 		JPanel resource_panel = new JPanel();
+		this.textAreaCpyCycles = new JTextArea(" " + this.computer.getCPUCycleCount(), 1, 5);
 		
 		// CPU cycle counter
-		JTextArea cpu_cycle_value_box = new JTextArea(" " + this.computer.getCPUCycleCount(), 1, 5);
-		this.textAreaRegisters.add(cpu_cycle_value_box);
-		cpu_cycle_value_box.setEditable(false);
-		cpu_cycle_value_box.setVisible(true);
+//		JTextArea cpu_cycle_value_box = new JTextArea(" " + this.computer.getCPUCycleCount(), 1, 5);
+//		this.textAreaCpyCycles.add(cpu_cycle_value_box);
+		this.textAreaCpyCycles.setEditable(false);
+		this.textAreaCpyCycles.setVisible(true);
 		JLabel cpu_cycle_message = new JLabel("CPU cycles:");
 	
-		JTextArea lines_of_code_value_box = new JTextArea(" " + this.computer.instruction_lines.length, 1, 5);
-		this.textAreaRegisters.add(lines_of_code_value_box);
-		lines_of_code_value_box.setEditable(false);
-		lines_of_code_value_box.setVisible(true);
-		JLabel number_of_lines_of_code_message = new JLabel("# lines of code:");
+//		JTextArea lines_of_code_value_box = new JTextArea(" " + this.computer.instruction_lines.length, 1, 5);
+//		this.textAreaRegisters.add(lines_of_code_value_box);
+//		lines_of_code_value_box.setEditable(false);
+//		lines_of_code_value_box.setVisible(true);
+//		JLabel number_of_lines_of_code_message = new JLabel("# lines of code:");
 		
 		resource_panel.add(cpu_cycle_message);
-		resource_panel.add(cpu_cycle_value_box);
+		resource_panel.add(this.textAreaCpyCycles);
 		
-		resource_panel.add(lines_of_code_value_box);
-		resource_panel.add(number_of_lines_of_code_message);
+//		resource_panel.add(lines_of_code_value_box);
+//		resource_panel.add(number_of_lines_of_code_message);
+		
+//		this.textAreaCpyCycles.setText("" + this.computer.getCPUCycleCount());
+		
+		
 		return resource_panel;
 		
 	}
@@ -404,7 +412,9 @@ public class GameGUI extends JFrame {
 			this.textAreaRegisters.get(index).setText("" + register.getValueInt());
 			index++;
 		}
-//		this.textAreaRegisters.get(2).setText("" + this.computer.getCPUCycleCount());
+//		System.out.println(this.computer.getCPUCycleCount());
+//		this.resourcePanel.getComponent(1).getName();
+		this.textAreaCpyCycles.setText("" + this.computer.getCPUCycleCount());
 	}
 	
 	public void resetComputer() {
@@ -419,6 +429,7 @@ public class GameGUI extends JFrame {
 			register.setValue("0");
 			index++;
 		}
+		this.textAreaCpyCycles.setText("" + 0);
 		highlightCodeLine(this.codeBox, this.computer);
 	}
 	
