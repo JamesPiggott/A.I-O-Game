@@ -1,0 +1,5 @@
+PuzzleOne=Unsolved
+PuzzleTwo=Unsolved
+PuzzleThree=Unsolved
+PuzzleFour=Unsolved
+PuzzleFive=Unsolved

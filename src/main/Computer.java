@@ -5,7 +5,13 @@ import assets.register.instruction.MarkRegister;
 import assets.register.instruction.Register;
 import gui.GameGUI;
 import puzzles.PuzzleSimpleOscillatingValue;
+
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.List;
 
 public class Computer {
 	
@@ -277,6 +283,25 @@ public class Computer {
 			} 
 		}
 	}
+	
+//	public void updatePuzzleResult() {
+//        if (Files.exists(Paths.get("results/results.txt"))) {
+//        	try {
+//				List<String> results = Files.readAllLines(Paths.get("results/results.txt"), StandardCharsets.UTF_8);	
+//				int index = 0;
+//				for (String result : results) {
+//					if (result.contains("One")) {
+//						
+//					}
+//
+//					index++;
+//				}
+//			
+//			} catch (IOException e) {
+//				e.printStackTrace();
+//			}  	
+//        } 
+//	}
 	
 	public CPU_X86 getCPU() {
 		return this.cpu_one;

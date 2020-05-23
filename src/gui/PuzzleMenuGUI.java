@@ -4,6 +4,12 @@ import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.List;
+import java.util.stream.Stream;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -12,12 +18,16 @@ public class PuzzleMenuGUI {
 	
 	private GameGUI gameGUI;
 	private String[] puzzleNames = { "One", "Two", "Three", "Four", "Five" };
+	private String[] puzzleResults = new String[5];
 	
 	public PuzzleMenuGUI(GameGUI gameGUI) {
 		this.gameGUI = gameGUI;
 	}
 
 	public void buildPuzzleMenu() {
+		
+		getPuzzleResults();
+		
 		JButton goBackButton = new JButton("Back");
 		goBackButton.setPreferredSize(new Dimension(300, 150));
 		goBackButton.setBackground(GUIMarkUp.buttonColor);
@@ -36,7 +46,7 @@ public class PuzzleMenuGUI {
         	}
         });
         
-        JComboBox<?> puzzles = new JComboBox<Object>(puzzleNames);
+        JComboBox<?> puzzles = new JComboBox<Object>(puzzleResults);
         puzzles.setPreferredSize(new Dimension(300, 30));
         puzzles.setBackground(GUIMarkUp.buttonColor);
         puzzles.addActionListener(new ActionListener() {
@@ -64,6 +74,28 @@ public class PuzzleMenuGUI {
 	    JComboBox<?> cb = (JComboBox<?>) evt.getSource();
 	    String name = (String)cb.getSelectedItem();
 	    this.gameGUI.puzzleName = name;
+	}
+	
+	private void getPuzzleResults() {
+        if (Files.exists(Paths.get("results/results.txt"))) {
+        	try {
+				List<String> results = Files.readAllLines(Paths.get("results/results.txt"), StandardCharsets.UTF_8);	
+				int index = 0;
+				for (String result : results) {
+					if (result.contains("Unsolved")) {
+						puzzleResults[index] = puzzleNames[index] +  ": Unsolved";
+					} else if (result.contains("Solved")) {
+						puzzleResults[index] = puzzleNames[index] +  ": Solved";
+					} else {
+						puzzleResults[index] = puzzleNames[index] +  ": No result";
+					}
+					index++;
+				}
+			
+			} catch (IOException e) {
+				e.printStackTrace();
+			}  	
+        } 
 	}
 	
 	private void SwitchFromPuzzleToMainMenu(java.awt.event.ActionEvent evt) {

@@ -2,6 +2,8 @@ package puzzles;
 
 public class PuzzleSimpleOscillatingValue implements Puzzle {
 	
+	public static int puzzleNumber = 1;
+	
 	private int min_cpu_cycle = 99;
 	private int max_cpu_cycle = 999;
 

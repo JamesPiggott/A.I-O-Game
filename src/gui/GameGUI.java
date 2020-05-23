@@ -58,6 +58,10 @@ public class GameGUI extends JFrame {
 
 	private boolean started;
 	
+	
+	// List of Panels, TextAreas and Buttons that should be easily reachable
+	private JButton stepButton;
+	
 	public GameGUI(Computer computer) {
 		
 		super("Game GUI");
@@ -170,14 +174,8 @@ public class GameGUI extends JFrame {
 		mainPanelConstraints.gridx = 1;
 		mainPanelConstraints.gridy = 2;
 		mainPanel.add(createButtonPanel(), mainPanelConstraints);
-//		mainPanelConstraints.gridx = 2;
-//		mainPanelConstraints.gridy = 2;
-////		this.resourcePanel = createResourceWidgets();
-//		mainPanel.add(createResourceWidgets(), mainPanelConstraints);
-
-		
 		mainPanelConstraints.gridx = 1;
-		mainPanelConstraints.gridy = 4;
+		mainPanelConstraints.gridy = 3;
 		mainPanel.add(description_panel, mainPanelConstraints);
 		mainPanel.setVisible(true);
 		
@@ -223,10 +221,9 @@ public class GameGUI extends JFrame {
         // Reset button stops a game and returns all start values
         JButton resetButton = new JButton("Reset");
         resetButton.setBackground(GUIMarkUp.buttonColor);
-        resetButton.addActionListener(new ActionListener()
-        {
-          public void actionPerformed(ActionEvent e)
-          {
+        resetButton.addActionListener(new ActionListener() {
+          public void actionPerformed(ActionEvent e) {
+        	  setStepToEnabled();
         	  resetComputer();
         	  started = false;
           }
@@ -235,10 +232,9 @@ public class GameGUI extends JFrame {
         // Pause button interrupts a running game
         JButton pauseButton = new JButton("Pause"); 
         pauseButton.setBackground(GUIMarkUp.buttonColor);
-        pauseButton.addActionListener(new ActionListener()
-        {
-          public void actionPerformed(ActionEvent e)
-          {
+        pauseButton.addActionListener(new ActionListener() {
+          public void actionPerformed(ActionEvent e) {
+        	  setStepToEnabled();
         	  new Thread(new Runnable() {
 					public void run() {
 						interruptProgram();
@@ -248,12 +244,10 @@ public class GameGUI extends JFrame {
         });
         
         // Advance one cycle (perform one line of code)
-        JButton stepButton = new JButton("Step"); 
+        this.stepButton = new JButton("Step"); 
         stepButton.setBackground(GUIMarkUp.buttonColor);
-        stepButton.addActionListener(new ActionListener()
-        {
-          public void actionPerformed(ActionEvent e)
-          {
+        stepButton.addActionListener(new ActionListener() {
+          public void actionPerformed(ActionEvent e) {
         	  if (started == false) {
         		  setAllMarkPoints(codeBox.getText());
         		  started = true;
@@ -267,6 +261,7 @@ public class GameGUI extends JFrame {
         runButton.setBackground(GUIMarkUp.buttonColor);
         runButton.addActionListener(new ActionListener() {
           public void actionPerformed(ActionEvent e) {
+        	  setStepToNotEnablede();
         	  if (getInterrupted() == true) {
         		  resumeProgram(false);
         	  } else {
@@ -274,7 +269,6 @@ public class GameGUI extends JFrame {
   					public void run() {
   						setAllMarkPoints(codeBox.getText());
   						sendCodetoGame(codeBox.getText(), false, false);
-  						setStepToNotEditable();
   					}
   				}).start();  
         	  }
@@ -286,6 +280,7 @@ public class GameGUI extends JFrame {
         runFastButton.setBackground(GUIMarkUp.buttonColor);
         runFastButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				setStepToNotEnablede();
         	  if (getInterrupted() == true) {
         		  resumeProgram(true);
         	  } else {		
@@ -380,19 +375,14 @@ public class GameGUI extends JFrame {
 		}
 	}
 	
-	private void setStepToNotEditable() {                                
-	    Component[] comp = this.gamegui.getComponents();
-	    for (int i = 0; i < comp.length;i++) {
-	    	System.out.println(comp[i].getName());
-//	        if (comp[i].getName().contentEquals("Main")) {
-//	        	Component buttonPanel = comp[i].getComponentAt(0, 0);
-//	        	System.out.println(buttonPanel.getName());
-//	        }
-	    }
+	private void setStepToNotEnablede() {                                
+		this.stepButton.setEnabled(false);
 	} 
 	
-
-	
+	private void setStepToEnabled() {                                
+		this.stepButton.setEnabled(true);
+	} 
+		
 	public void highlightCodeLine( JTextArea   codeBox, Computer   computer) {
 		codeBox.getHighlighter().removeAllHighlights();
 		DefaultHighlightPainter painter = new DefaultHighlighter.DefaultHighlightPainter(Color.GRAY);
@@ -412,8 +402,6 @@ public class GameGUI extends JFrame {
 			this.textAreaRegisters.get(index).setText("" + register.getValueInt());
 			index++;
 		}
-//		System.out.println(this.computer.getCPUCycleCount());
-//		this.resourcePanel.getComponent(1).getName();
 		this.textAreaCpyCycles.setText("" + this.computer.getCPUCycleCount());
 	}
 	

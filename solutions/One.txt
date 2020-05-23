@@ -1,4 +1,4 @@
-MOV 0 x
 MOV 1 x
+MOV 0 x
 MOV 1 x
 MOV 0 x
