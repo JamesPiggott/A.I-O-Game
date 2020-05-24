@@ -1,4 +1,4 @@
-PuzzleOne=Unsolved
+PuzzleOne=Solved
 PuzzleTwo=Unsolved
 PuzzleThree=Unsolved
 PuzzleFour=Unsolved

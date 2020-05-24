@@ -9,10 +9,11 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
-import java.util.stream.Stream;
-
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+
+import puzzles.PuzzleSimpleFileOperations;
+import puzzles.PuzzleSimpleOscillatingValue;
 
 public class PuzzleMenuGUI {
 	
@@ -73,6 +74,23 @@ public class PuzzleMenuGUI {
 	private void selectPuzzle(java.awt.event.ActionEvent evt) {
 	    JComboBox<?> cb = (JComboBox<?>) evt.getSource();
 	    String name = (String)cb.getSelectedItem();
+	    
+	    if (name.contains("One")) {
+	    	name = puzzleNames[0];
+	    	this.gameGUI.setPuzzle(new PuzzleSimpleOscillatingValue());
+	    } else if(name.contains("Two")) {
+	    	name = puzzleNames[1];
+	    	this.gameGUI.setPuzzle(new PuzzleSimpleFileOperations());
+	    } else if(name.contains("Three")) {
+	    	name = puzzleNames[2];
+	    } else if(name.contains("Four")) {
+	    	name = puzzleNames[3];
+	    } else if(name.contains("Five")) {
+	    	name = puzzleNames[4];
+	    } else {
+	    	name = "";
+	    }    
+	    
 	    this.gameGUI.puzzleName = name;
 	}
 	

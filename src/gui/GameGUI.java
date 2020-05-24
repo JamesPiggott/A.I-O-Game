@@ -1,7 +1,6 @@
 package gui;
 
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
@@ -28,6 +27,7 @@ import javax.swing.text.DefaultHighlighter.DefaultHighlightPainter;
 
 import assets.register.instruction.Register;
 import main.Computer;
+import puzzles.Puzzle;
 
 @SuppressWarnings("serial")
 public class GameGUI extends JFrame {
@@ -157,7 +157,6 @@ public class GameGUI extends JFrame {
 		this.description_box.setSize(800, 500);
 		this.description_box.setEditable(false);
 		this.description_box.setLineWrap(true);
-		this.description_box.setText(this.computer.puzzle.getDescription());
 		GridBagConstraints descriptionPanelConstraints = new GridBagConstraints();
 		descriptionPanelConstraints.gridx = 0;
 		descriptionPanelConstraints.gridy = 0;
@@ -202,6 +201,11 @@ public class GameGUI extends JFrame {
 		}
 		
 		return register_panel;
+	}
+	
+	public void setPuzzle(Puzzle puzzle) {
+    	this.computer.puzzle = puzzle;
+    	this.description_box.setText(this.computer.puzzle.getDescription());
 	}
 	
 	public JPanel createButtonPanel() {

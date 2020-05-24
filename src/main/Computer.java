@@ -4,9 +4,11 @@ import assets.register.cpu.CPU_X86;
 import assets.register.instruction.MarkRegister;
 import assets.register.instruction.Register;
 import gui.GameGUI;
+import puzzles.Puzzle;
 import puzzles.PuzzleSimpleOscillatingValue;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -18,7 +20,7 @@ public class Computer {
 	public GameGUI gui;
 	public boolean gameRunning;
 	public CPU_X86 cpu_one;
-	public PuzzleSimpleOscillatingValue puzzle;
+	public Puzzle puzzle;
 	public int cpu_cycle;
 	public boolean runFast;
 	public boolean interrupted;
@@ -34,7 +36,7 @@ public class Computer {
 		this.gameRunning = true;
 		this.interrupted = false;
 		this.cpu_one = new CPU_X86();
-		this.puzzle = new PuzzleSimpleOscillatingValue();
+//		this.puzzle = new PuzzleSimpleOscillatingValue();
 		this.cpu_cycle = 0;
 		this.currentLine = 0;
 		this.gameThread = new Thread();
@@ -79,7 +81,6 @@ public class Computer {
 							break;
 						}
 					} catch (InterruptedException e) {
-						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
 				}
@@ -274,6 +275,7 @@ public class Computer {
 		if (this.puzzle.getValue(this.cpu_cycle).contentEquals(this.cpu_one.getValueRegisters())) {
 			if (this.cpu_cycle == 999 && this.solutionIncorrect == false) {
 				this.gui.displayPuzzleOutcome("Puzzle solved");
+				updatePuzzleResult();
 			} 
 		} else {
 			this.solutionIncorrect = true;
@@ -283,25 +285,33 @@ public class Computer {
 			} 
 		}
 	}
-	
-//	public void updatePuzzleResult() {
-//        if (Files.exists(Paths.get("results/results.txt"))) {
-//        	try {
-//				List<String> results = Files.readAllLines(Paths.get("results/results.txt"), StandardCharsets.UTF_8);	
-//				int index = 0;
-//				for (String result : results) {
-//					if (result.contains("One")) {
-//						
-//					}
-//
-//					index++;
-//				}
-//			
-//			} catch (IOException e) {
-//				e.printStackTrace();
-//			}  	
-//        } 
-//	}
+
+	public void updatePuzzleResult() {
+        if (Files.exists(Paths.get("results/results.txt"))) {
+        	try {
+        		String newresult = "";
+				List<String> results = Files.readAllLines(Paths.get("results/results.txt"), StandardCharsets.UTF_8);	
+				for (String result : results) {
+					System.out.println(result);
+					if (result.contains("One")) {
+						newresult = newresult + "PuzzleOne=Solved" + "\n";
+					} else if (result.contains("Five")) {
+						newresult = newresult + "PuzzleFive=Unsolved";
+					} else {
+						newresult = newresult + result + "\n";
+					}
+
+				}
+				System.out.println(newresult);
+				try (PrintWriter out = new PrintWriter("results/results.txt")) {
+				    out.print(newresult);
+				}
+			
+			} catch (IOException e) {
+				e.printStackTrace();
+			}  	
+        } 
+	}
 	
 	public CPU_X86 getCPU() {
 		return this.cpu_one;
