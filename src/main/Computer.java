@@ -36,7 +36,6 @@ public class Computer {
 		this.gameRunning = true;
 		this.interrupted = false;
 		this.cpu_one = new CPU_X86();
-//		this.puzzle = new PuzzleSimpleOscillatingValue();
 		this.cpu_cycle = 0;
 		this.currentLine = 0;
 		this.gameThread = new Thread();
@@ -259,14 +258,6 @@ public class Computer {
 		// Fetch a file
 	}
 
-	public void resetComputerState() {
-		
-	}
-	
-	public void pauseComputer() {
-		
-	}
-	
 	public ArrayList<Register> retrieveCurrentValueCPUs() {
 		return this.cpu_one.getRegisters();
 	}
@@ -322,8 +313,8 @@ public class Computer {
 	}
 	
 	public void resetComputer() {
+		this.interruptProgram();
 		this.cpu_one = new CPU_X86();
-		this.puzzle = new PuzzleSimpleOscillatingValue();
 		this.cpu_cycle = 0;
 		this.currentLine = 0;
 		this.gameRunning = true;

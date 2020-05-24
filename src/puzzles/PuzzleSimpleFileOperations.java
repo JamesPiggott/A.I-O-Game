@@ -21,4 +21,10 @@ public class PuzzleSimpleFileOperations implements Puzzle {
 		return this.max_cpu_cycle;
 	}
 
+	@Override
+	public boolean checkResult() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
 }

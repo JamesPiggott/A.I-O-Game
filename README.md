@@ -7,7 +7,7 @@ The game features a low-level programming language similar to the one found in E
  
 ### Basic instructions
 - [ ] MOV [R/I R]: copy content. This can be to either a register, CPU (implicit) or to main memory (file)
-- [ ] OOP: do nothing for one cycle. Can be used to keep scripts in sync.
+- [ ] NOOP: do nothing for one cycle. Can be used to keep scripts in sync
 - [ ] MARK [value] statement: destination for the jump ‘JMP’ statement
 - [ ] JMP [value]: jump to a particular line marked with ‘MARK’
 - [ ] BREAK: move to the first line beyond the next ‘JMP’ statement
