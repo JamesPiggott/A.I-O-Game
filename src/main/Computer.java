@@ -5,8 +5,6 @@ import assets.register.instruction.MarkRegister;
 import assets.register.instruction.Register;
 import gui.GameGUI;
 import puzzles.Puzzle;
-import puzzles.PuzzleSimpleOscillatingValue;
-
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.nio.charset.StandardCharsets;
@@ -255,7 +253,9 @@ public class Computer {
 	}
 	
 	public void performFetch() {
-		// Fetch a file
+		// if file exists return it
+		
+		// else do nothing
 	}
 
 	public ArrayList<Register> retrieveCurrentValueCPUs() {

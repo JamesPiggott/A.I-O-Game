@@ -1,12 +1,24 @@
 package puzzles;
 
+import assets.register.files.FileOperations;
+
 public class PuzzleSimpleFileOperations implements Puzzle {
 	
 	private int max_cpu_cycle = 999;
+	private FileOperations file;
+	
+	public PuzzleSimpleFileOperations() {
+		this.file = new FileOperations("garbage");
+		this.file.insertValue("Dade");
+		this.file.insertValue("Kate");
+		this.file.insertValue("Joey");
+		this.file.insertValue("Emmanuel");
+		this.file.insertValue("Paul");
+	}
+	
 
 	@Override
 	public String getValue(int cycle) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
@@ -23,8 +35,12 @@ public class PuzzleSimpleFileOperations implements Puzzle {
 
 	@Override
 	public boolean checkResult() {
-		// TODO Auto-generated method stub
 		return false;
+	}
+
+	@Override
+	public FileOperations getFile() {
+		return this.file;
 	}
 
 }

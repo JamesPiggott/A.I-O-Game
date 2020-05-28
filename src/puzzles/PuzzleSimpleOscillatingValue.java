@@ -1,5 +1,7 @@
 package puzzles;
 
+import assets.register.files.FileOperations;
+
 public class PuzzleSimpleOscillatingValue implements Puzzle {
 	
 	public static int puzzleNumber = 1;
@@ -35,5 +37,11 @@ public class PuzzleSimpleOscillatingValue implements Puzzle {
 	public boolean checkResult() {
 		// TODO Auto-generated method stub
 		return false;
+	}
+
+	@Override
+	public FileOperations getFile() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }
