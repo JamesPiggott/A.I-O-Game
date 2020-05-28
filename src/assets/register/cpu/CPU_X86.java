@@ -314,6 +314,28 @@ public class CPU_X86 implements CPU {
 		}	
 	}
 	
+	// File and memory operations
+	public void performFetch(String[] code_line) {
+		
+	}
+	
+	public void performSeek(String[] code_line) {
+		
+	}
+	
+	public void performVoid(String[] code_line) {
+		
+	}
+	
+	public void performDrop(String[] code_line) {
+		
+	}
+	
+	public void performWipe(String[] code_line) {
+		
+	}
+	
+	
 	public void setJumpList(ArrayList<Integer> jump_list) {
 		this.jump_list = jump_list;
 	}
