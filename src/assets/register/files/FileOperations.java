@@ -47,6 +47,10 @@ public class FileOperations {
 		}
 	}
 	
+	public void removeValue() {
+		
+	}
+	
 	public void wipeContents() {
 		this.file_contents.clear();
 	}

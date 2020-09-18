@@ -13,6 +13,7 @@ public class CPU_X86 implements CPU {
 	public ArrayList<Register> register_list;
 	public ArrayList<MarkRegister> mark_list;
 	public ArrayList<FileOperations> file_list;
+	public FileOperations currentFile;
 	public ArrayList<Integer> jump_list;
 	public BooleanRegister boolean_register;
 	
@@ -316,23 +317,33 @@ public class CPU_X86 implements CPU {
 	
 	// File and memory operations
 	public void performFetch(String[] code_line) {
-		
+		if (code_line.length == 2) {
+			this.currentFile = getFileOperations(code_line[1]);
+		}
 	}
 	
 	public void performSeek(String[] code_line) {
-		
+		if (code_line.length == 2) {
+			this.currentFile.removeValue();
+		}
 	}
 	
 	public void performVoid(String[] code_line) {
-		
+		if (code_line.length == 2) {
+			this.currentFile.removeValue();
+		}
 	}
 	
 	public void performDrop(String[] code_line) {
-		
+		if (code_line.length == 2) {
+			this.currentFile = null;
+		}
 	}
 	
 	public void performWipe(String[] code_line) {
-		
+		if (code_line.length == 2) {
+			this.currentFile.wipeContents();
+		}
 	}
 	
 	
