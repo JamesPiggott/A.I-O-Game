@@ -50,3 +50,5 @@ Operations on RAM are being worked on and basic network coding will follow after
 - [ ] Encounter system for dialogue (December) 
 - [ ] Basic sounds (December)
 - [ ] Up to 5 new puzzles (December)
+
+Most importantly the game should receive a proper name!
