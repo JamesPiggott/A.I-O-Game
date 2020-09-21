@@ -46,11 +46,17 @@ public class FileOperations {
 			location_handler++;
 		}
 	}
-	
-	public void removeValue() {
 		
+	/*
+	 * Remove the value currently index by location_handler
+	 */
+	public void removeValue(String value) {
+		this.file_contents.remove(Integer.parseInt(value));
 	}
 	
+	/*
+	 * Clear all key value pairs from file_contents.
+	 */
 	public void wipeContents() {
 		this.file_contents.clear();
 	}

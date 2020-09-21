@@ -179,19 +179,19 @@ public class Computer {
 		
 		// File and memory operations
 		case "FCH":
-			this.performFetch();
+			this.cpu_one.performFetch(instruction_elements);
 			break;
 		case "SEEK":
-			System.out.println("SEEK");
+			this.cpu_one.performSeek(instruction_elements);
 			break;
 		case "VOID":
-			System.out.println("VOID");
+			this.cpu_one.performVoid(instruction_elements);
 			break;
 		case "DROP":
-			System.out.println("DROP");
+			this.cpu_one.performDrop(instruction_elements);
 			break;
 		case "WIPE":
-			System.out.println("WIPE");
+			this.cpu_one.performWipe(instruction_elements);
 			break;
 			
 		// Network operations
@@ -252,12 +252,6 @@ public class Computer {
 		
 	}
 	
-	public void performFetch() {
-		// if file exists return it
-		
-		// else do nothing
-	}
-
 	public ArrayList<Register> retrieveCurrentValueCPUs() {
 		return this.cpu_one.getRegisters();
 	}

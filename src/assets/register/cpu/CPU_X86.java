@@ -324,13 +324,16 @@ public class CPU_X86 implements CPU {
 	
 	public void performSeek(String[] code_line) {
 		if (code_line.length == 2) {
-			this.currentFile.removeValue();
+			
+//			if (Integer.parseInt(s))
+			
+//			this.currentFile.seekHandler(operand, location_change);
 		}
 	}
 	
 	public void performVoid(String[] code_line) {
 		if (code_line.length == 2) {
-			this.currentFile.removeValue();
+			this.currentFile.removeValue(code_line[1]);
 		}
 	}
 	
