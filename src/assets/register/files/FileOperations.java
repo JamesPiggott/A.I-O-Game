@@ -57,6 +57,7 @@ public class FileOperations {
 	/*
 	 * Clear all key value pairs from file_contents.
 	 */
+
 	public void wipeContents() {
 		this.file_contents.clear();
 	}
