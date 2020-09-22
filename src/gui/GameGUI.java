@@ -36,6 +36,7 @@ public class GameGUI extends JFrame {
     private JTextArea   codeBox;
     private JScrollPane pane1;
     private JTextArea values;
+    private JTextArea valuesFile;
     private String output;
     public Thread queryThread;
     private ArrayList<JTextArea> textAreaRegisters;
@@ -130,6 +131,22 @@ public class GameGUI extends JFrame {
 		panel.add(scrollPane, outputPanelConstraints);
 		panel.setSize(300, 300);
 		
+        // File output panel
+//        JPanel filePanel = new JPanel(new GridBagLayout());
+//        filePanel.setBackground(this.backgroundColor);
+//		JLabel file_name = new JLabel("Values:");
+//		this.valuesFile = new JTextArea("", 5, 40);
+//		this.valuesFile.setEditable(false);
+//		JScrollPane fileScrollPane = new JScrollPane(this.valuesFile);
+//		GridBagConstraints filePanelConstraints = new GridBagConstraints();
+//		filePanelConstraints.gridx = 0;
+//		filePanelConstraints.gridy = 0;
+//		filePanel.add(file_name, filePanelConstraints);
+//		filePanelConstraints.gridx = 0;
+//		filePanelConstraints.gridy = 1;
+//		filePanel.add(fileScrollPane, filePanelConstraints);
+//		filePanel.setSize(300, 300);
+		
 		
 		// Add each panel to the JFrame with the 'right' GridBagConstraints
 		JPanel mainPanel = new JPanel(new GridBagLayout());
@@ -141,9 +158,12 @@ public class GameGUI extends JFrame {
 		mainPanelConstraints.gridx = 0;
 		mainPanelConstraints.gridy = 2;
 		mainPanel.add(panel, mainPanelConstraints);
+//		mainPanelConstraints.gridx = 0;
+//		mainPanelConstraints.gridy = 3;
+//		mainPanel.add(filePanel, mainPanelConstraints);
 		mainPanel.setBackground(this.backgroundColor);
 		
-		// gameworld
+		// game world
         this.gameWorld = new JTextArea("", 15, 40);
         this.gameWorld.setEditable(false);
         this.gameWorld.setSize(800, 500);
@@ -318,29 +338,14 @@ public class GameGUI extends JFrame {
 		this.textAreaCpyCycles = new JTextArea(" " + this.computer.getCPUCycleCount(), 1, 5);
 		
 		// CPU cycle counter
-//		JTextArea cpu_cycle_value_box = new JTextArea(" " + this.computer.getCPUCycleCount(), 1, 5);
-//		this.textAreaCpyCycles.add(cpu_cycle_value_box);
 		this.textAreaCpyCycles.setEditable(false);
 		this.textAreaCpyCycles.setVisible(true);
 		JLabel cpu_cycle_message = new JLabel("CPU cycles:");
-	
-//		JTextArea lines_of_code_value_box = new JTextArea(" " + this.computer.instruction_lines.length, 1, 5);
-//		this.textAreaRegisters.add(lines_of_code_value_box);
-//		lines_of_code_value_box.setEditable(false);
-//		lines_of_code_value_box.setVisible(true);
-//		JLabel number_of_lines_of_code_message = new JLabel("# lines of code:");
 		
 		resource_panel.add(cpu_cycle_message);
 		resource_panel.add(this.textAreaCpyCycles);
 		
-//		resource_panel.add(lines_of_code_value_box);
-//		resource_panel.add(number_of_lines_of_code_message);
-		
-//		this.textAreaCpyCycles.setText("" + this.computer.getCPUCycleCount());
-		
-		
-		return resource_panel;
-		
+		return resource_panel;	
 	}
 	
 	public void setAllMarkPoints(String code) {
