@@ -1,7 +1,6 @@
 package main;
 
 import assets.register.cpu.CPU_X86;
-import assets.register.files.FileOperations;
 import assets.register.instruction.MarkRegister;
 import assets.register.instruction.Register;
 import gui.GameGUI;
@@ -255,10 +254,6 @@ public class Computer {
 	
 	public ArrayList<Register> retrieveCurrentValueCPUs() {
 		return this.cpu_one.getRegisters();
-	}
-	
-	public FileOperations retrieveCurrentFile() {
-		return this.cpu_one.getCurrentFile();
 	}
 	
 	public void compareResults() {	

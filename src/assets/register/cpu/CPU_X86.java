@@ -371,20 +371,12 @@ public class CPU_X86 implements CPU {
 	}
 	
 	public FileOperations getFileOperations(String name) {
-		
-		String file_name = name.toLowerCase();
-		
 		for (FileOperations file : file_list) {
-			if (file.getName().contentEquals(file_name)) {
+			if (file.getName().contentEquals(name)) {
 				return file;
 			}
 		}
-		FileOperations file = new FileOperations(file_name);
+		FileOperations file = new FileOperations(name);
 		return file;
 	}
-	
-	public FileOperations getCurrentFile() {
-		return this.currentFile;
-	}
-
 }
