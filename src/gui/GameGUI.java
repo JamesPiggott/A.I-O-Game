@@ -25,6 +25,7 @@ import javax.swing.text.BadLocationException;
 import javax.swing.text.DefaultHighlighter;
 import javax.swing.text.DefaultHighlighter.DefaultHighlightPainter;
 
+import assets.register.files.FileOperations;
 import assets.register.instruction.Register;
 import main.Computer;
 import puzzles.Puzzle;
@@ -36,6 +37,7 @@ public class GameGUI extends JFrame {
     private JTextArea   codeBox;
     private JScrollPane pane1;
     private JTextArea values;
+    private JTextArea valuesFile;
     private String output;
     public Thread queryThread;
     private ArrayList<JTextArea> textAreaRegisters;
@@ -130,6 +132,22 @@ public class GameGUI extends JFrame {
 		panel.add(scrollPane, outputPanelConstraints);
 		panel.setSize(300, 300);
 		
+        // File output panel
+		JPanel filePanel = new JPanel(new GridBagLayout());
+		filePanel.setBackground(this.backgroundColor);
+		JLabel file_name = new JLabel("Values:");
+		this.valuesFile = new JTextArea("", 5, 40);
+		this.valuesFile.setEditable(false);
+		JScrollPane fileScrollPane = new JScrollPane(this.valuesFile);
+		GridBagConstraints filePanelConstraints = new GridBagConstraints();
+		filePanelConstraints.gridx = 0;
+		filePanelConstraints.gridy = 0;
+		filePanel.add(file_name, filePanelConstraints);
+		filePanelConstraints.gridx = 0;
+		filePanelConstraints.gridy = 1;
+		filePanel.add(fileScrollPane, filePanelConstraints);
+		filePanel.setSize(300, 300);
+		
 		
 		// Add each panel to the JFrame with the 'right' GridBagConstraints
 		JPanel mainPanel = new JPanel(new GridBagLayout());
@@ -176,6 +194,9 @@ public class GameGUI extends JFrame {
 		mainPanelConstraints.gridx = 1;
 		mainPanelConstraints.gridy = 3;
 		mainPanel.add(description_panel, mainPanelConstraints);
+		mainPanelConstraints.gridx = 0;
+		mainPanelConstraints.gridy = 3;
+		mainPanel.add(filePanel, mainPanelConstraints);
 		mainPanel.setVisible(true);
 		
 		this.gamegui.add(mainPanel);
@@ -355,6 +376,10 @@ public class GameGUI extends JFrame {
 		highlightCodeLine(this.codeBox, this.computer);
 		this.output = this.values.getText() + " " + this.computer.retrieveCurrentValueCPUs().get(0).getValue();
 		this.values.setText(this.output);
+		this.values.updateUI();
+		
+		FileOperations fileOutput = this.computer.getCPU().getCurrentFile();
+		this.valuesFile.setText(fileOutput.getValues().toString());
 		this.values.updateUI();
 	}
 	

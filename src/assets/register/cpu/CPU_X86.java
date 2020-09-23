@@ -379,4 +379,9 @@ public class CPU_X86 implements CPU {
 		FileOperations file = new FileOperations(name);
 		return file;
 	}
+	
+	public FileOperations getCurrentFile() {
+		return this.currentFile;
+	}
+	
 }

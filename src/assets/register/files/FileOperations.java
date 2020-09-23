@@ -65,4 +65,8 @@ public class FileOperations {
 	public String getName() {
 		return this.file_name;
 	}
+	
+	public HashMap<Integer, String> getValues() {
+		return this.file_contents;
+	}
 }
