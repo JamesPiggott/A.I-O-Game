@@ -159,6 +159,9 @@ public class GameGUI extends JFrame {
 		mainPanelConstraints.gridx = 0;
 		mainPanelConstraints.gridy = 2;
 		mainPanel.add(panel, mainPanelConstraints);
+		mainPanelConstraints.gridx = 0;
+		mainPanelConstraints.gridy = 3;
+		mainPanel.add(filePanel, mainPanelConstraints);
 		mainPanel.setBackground(this.backgroundColor);
 		
 		// gameworld
@@ -194,9 +197,6 @@ public class GameGUI extends JFrame {
 		mainPanelConstraints.gridx = 1;
 		mainPanelConstraints.gridy = 3;
 		mainPanel.add(description_panel, mainPanelConstraints);
-		mainPanelConstraints.gridx = 0;
-		mainPanelConstraints.gridy = 3;
-		mainPanel.add(filePanel, mainPanelConstraints);
 		mainPanel.setVisible(true);
 		
 		this.gamegui.add(mainPanel);
@@ -339,29 +339,12 @@ public class GameGUI extends JFrame {
 		this.textAreaCpyCycles = new JTextArea(" " + this.computer.getCPUCycleCount(), 1, 5);
 		
 		// CPU cycle counter
-//		JTextArea cpu_cycle_value_box = new JTextArea(" " + this.computer.getCPUCycleCount(), 1, 5);
-//		this.textAreaCpyCycles.add(cpu_cycle_value_box);
 		this.textAreaCpyCycles.setEditable(false);
 		this.textAreaCpyCycles.setVisible(true);
 		JLabel cpu_cycle_message = new JLabel("CPU cycles:");
-	
-//		JTextArea lines_of_code_value_box = new JTextArea(" " + this.computer.instruction_lines.length, 1, 5);
-//		this.textAreaRegisters.add(lines_of_code_value_box);
-//		lines_of_code_value_box.setEditable(false);
-//		lines_of_code_value_box.setVisible(true);
-//		JLabel number_of_lines_of_code_message = new JLabel("# lines of code:");
-		
 		resource_panel.add(cpu_cycle_message);
-		resource_panel.add(this.textAreaCpyCycles);
-		
-//		resource_panel.add(lines_of_code_value_box);
-//		resource_panel.add(number_of_lines_of_code_message);
-		
-//		this.textAreaCpyCycles.setText("" + this.computer.getCPUCycleCount());
-		
-		
+		resource_panel.add(this.textAreaCpyCycles);		
 		return resource_panel;
-		
 	}
 	
 	public void setAllMarkPoints(String code) {
@@ -374,13 +357,20 @@ public class GameGUI extends JFrame {
 
 	public void displayOutputValue() {	
 		highlightCodeLine(this.codeBox, this.computer);
-		this.output = this.values.getText() + " " + this.computer.retrieveCurrentValueCPUs().get(0).getValue();
-		this.values.setText(this.output);
-		this.values.updateUI();
+		
+		Register register = this.computer.retrieveCurrentValueCPUs().get(0);	
+		if (register != null) {
+			String CPUValue = register.getValue();
+			this.output = this.values.getText() + " " + CPUValue;
+			this.values.setText(this.output);
+			this.values.updateUI();
+		}
 		
 		FileOperations fileOutput = this.computer.getCPU().getCurrentFile();
-		this.valuesFile.setText(fileOutput.getValues().toString());
-		this.values.updateUI();
+		if (fileOutput != null) { 
+			this.valuesFile.setText(this.valuesFile.getText() + " " + fileOutput.getValues().toString()); 
+			this.valuesFile.updateUI();
+		}	
 	}
 	
 	public void displayPuzzleOutcome(String message) {
@@ -437,6 +427,7 @@ public class GameGUI extends JFrame {
 	public void resetComputer() {
 		this.computer.resetComputer();
 		this.values.setText("");
+		this.valuesFile.setText("");
 		
 		ArrayList<Register> registers = this.computer.retrieveCurrentValueCPUs();
 		
