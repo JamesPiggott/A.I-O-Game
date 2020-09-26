@@ -26,7 +26,7 @@ public class CPU_X86 implements CPU {
 		this.boolean_register.setValue(false);
 		this.register_list.add(register_one);
 		this.register_list.add(register_two);
-		
+		this.file_list = new ArrayList<FileOperations>();
 	}
 	
 	public void setRegisterValue(int register_value) {
@@ -317,15 +317,20 @@ public class CPU_X86 implements CPU {
 	
 	// File and memory operations
 	public void performFetch(String[] code_line) {
-		
+		if (code_line.length == 2) {		
+			this.currentFile = getFileOperations(code_line[1]);
+		}
 	}
 	
 	public void performSeek(String[] code_line) {
 		if (code_line.length == 2) {
+			int seek = Integer.parseInt(code_line[1]);
 			
-//			if (Integer.parseInt(s))
-			
-//			this.currentFile.seekHandler(operand, location_change);
+			if (seek >= 0) {
+				this.currentFile.seekHandler("+", seek);
+			} else {
+				this.currentFile.seekHandler("-", seek);
+			}
 		}
 	}
 	
@@ -337,11 +342,11 @@ public class CPU_X86 implements CPU {
 
 	
 	public void performDrop(String[] code_line) {
-		
+		this.currentFile = null;
 	}
 	
 	public void performWipe(String[] code_line) {
-		
+		this.currentFile.wipeContents();
 	}
 	
 	
@@ -371,13 +376,17 @@ public class CPU_X86 implements CPU {
 	}
 	
 	public FileOperations getFileOperations(String name) {
-		for (FileOperations file : file_list) {
-			if (file.getName().contentEquals(name)) {
-				return file;
+		if (this.file_list != null) {
+			for (FileOperations file : this.file_list) {
+				if (file.getName().contentEquals(name)) {
+					return file;
+				}
 			}
-		}
-		FileOperations file = new FileOperations(name);
-		return file;
+		} 
+		
+		FileOperations newFile = new FileOperations(name);
+		this.file_list.add(newFile);
+		return newFile;
 	}
 	
 	public FileOperations getCurrentFile() {

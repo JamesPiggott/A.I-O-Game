@@ -57,6 +57,7 @@ public class GameGUI extends JFrame {
 	private SettingsMenuGUI settings;
 	
 	public JPanel resourcePanel;
+	public JPanel filePanel;
 
 	private boolean started;
 	
@@ -133,9 +134,10 @@ public class GameGUI extends JFrame {
 		panel.setSize(300, 300);
 		
         // File output panel
-		JPanel filePanel = new JPanel(new GridBagLayout());
+		this.filePanel = new JPanel(new GridBagLayout());
 		filePanel.setBackground(this.backgroundColor);
-		JLabel file_name = new JLabel("Values:");
+		JLabel file_name = new JLabel("File name:");
+		file_name.setBackground(Color.WHITE);
 		this.valuesFile = new JTextArea("", 5, 40);
 		this.valuesFile.setEditable(false);
 		JScrollPane fileScrollPane = new JScrollPane(this.valuesFile);
@@ -367,7 +369,10 @@ public class GameGUI extends JFrame {
 		}
 		
 		FileOperations fileOutput = this.computer.getCPU().getCurrentFile();
-		if (fileOutput != null) { 
+		if (fileOutput != null) {
+			JLabel file_name = (JLabel) this.filePanel.getComponent(0);
+			file_name.setText("File name: " + fileOutput.getName());
+			
 			this.valuesFile.setText(this.valuesFile.getText() + " " + fileOutput.getValues().toString()); 
 			this.valuesFile.updateUI();
 		}	

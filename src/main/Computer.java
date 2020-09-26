@@ -126,8 +126,7 @@ public class Computer {
 		compareResults();
 	}
 	
-	
-	
+		
 	public void evaluateInstruction(String codeline) {
 		String[] instruction_elements = codeline.split("\\s+");
 		
