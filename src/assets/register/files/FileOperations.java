@@ -20,6 +20,7 @@ public class FileOperations {
 	public FileOperations(String name) {
 		this.file_name = name;
 		this.file_contents = new HashMap<Integer, String>();
+		this.location_handler = 0;
 	}
 	
 	public void seekHandler(String operand, int location_change) {
@@ -64,6 +65,10 @@ public class FileOperations {
 	
 	public String getName() {
 		return this.file_name;
+	}
+	
+	public int getLocationHandler() {
+		return this.location_handler;
 	}
 	
 	public HashMap<Integer, String> getValues() {
