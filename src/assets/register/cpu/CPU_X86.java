@@ -202,11 +202,60 @@ public class CPU_X86 implements CPU {
 	 * @param code_line
 	 */
 	public void performMove(String[] code_line) {
+		
+		if (this.currentFile != null) {
+			if (code_line[1].contentEquals(this.currentFile.getName()) || code_line[2].contentEquals(this.currentFile.getName())) {
+				
+				// There is a file involved
+				if (code_line[2].contentEquals(this.currentFile.getName())) {
+					doMoveToFile(code_line);
+				} else {
+					doMoveFromFile(code_line);
+				}			
+			}
+		} else {
+			String register_from_name = code_line[1];
+			String register_to_name = code_line[2];
+			
+			boolean register_from_exists = false;
+			boolean register_to_exists = false;
+			
+			Register register_from = null;
+			for (Register register : this.register_list) {
+				if (register.getRegisterName().equals(register_from_name)) {
+					register_from_exists = true;
+					register_from = register;
+				}
+			}
+			
+			Register register_to = null;
+			for (Register register : this.register_list) {
+				if (register.getRegisterName().equals(register_to_name)) {
+					register_to_exists = true;
+					register_to = register;
+				}
+			}
+			
+			if (register_from_exists == true && register_to_exists == true) {
+				register_to.setValue(register_from.getValue());
+			} else if (register_from_exists == false && register_to_exists == true) {
+				int move_value = Integer.parseInt(code_line[1]);
+				if (move_value > -99999 && move_value < 99999) {
+					if (code_line[2].contains("x")) {
+						this.getRegisters().get(0).setValue("" + move_value);
+					} else {
+						this.getRegisters().get(1).setValue("" + move_value);
+					}		
+				}
+			}
+		
+		}
+	}
+	
+	public void doMoveToFile(String[] code_line) {
 		String register_from_name = code_line[1];
-		String register_to_name = code_line[2];
 		
 		boolean register_from_exists = false;
-		boolean register_to_exists = false;
 		
 		Register register_from = null;
 		for (Register register : this.register_list) {
@@ -215,6 +264,16 @@ public class CPU_X86 implements CPU {
 				register_from = register;
 			}
 		}
+			
+		if (register_from_exists == true) {
+			this.currentFile.insertValue(register_from.getValue());		
+		}
+	}
+	
+	public void doMoveFromFile(String[] code_line) {
+		String register_to_name = code_line[2];
+		
+		boolean register_to_exists = false;
 		
 		Register register_to = null;
 		for (Register register : this.register_list) {
@@ -223,18 +282,9 @@ public class CPU_X86 implements CPU {
 				register_to = register;
 			}
 		}
-		
-		if (register_from_exists == true && register_to_exists == true) {
-			register_to.setValue(register_from.getValue());
-		} else if (register_from_exists == false && register_to_exists == true) {
-			int move_value = Integer.parseInt(code_line[1]);
-			if (move_value > -99999 && move_value < 99999) {
-				if (code_line[2].contains("x")) {
-					this.getRegisters().get(0).setValue("" + move_value);
-				} else {
-					this.getRegisters().get(1).setValue("" + move_value);
-				}		
-			}
+			
+		if (register_to_exists == true) {
+			register_to.setValue(this.currentFile.getValues().get(this.currentFile.getLocationHandler()));		
 		}
 	}
 	
