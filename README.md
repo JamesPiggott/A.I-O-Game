@@ -1,4 +1,4 @@
-# JavaComputerCodingGame
+# A.I/O
  This is a computer hacking game in the same spirit as [Exapunks](https://store.steampowered.com/app/716490/EXAPUNKS/), [Shenzhen I/O](https://store.steampowered.com/app/504210/SHENZHEN_IO/) and [TIS-100](https://store.steampowered.com/app/370360/TIS100/). 
  Yet, I intend for this game to have unique features that will ste it apart. Besides beating hacking puzzles it will also feature interactive storytelling, hopefully using a basic version of the [Encounter System](https://www.erasmatazz.com/library/fourth-generation-interacti/the-encounter-system/index.html) as developed by Chris Crawford.
  Right now I am still developing it and it is not feature complete. Though it does run.
@@ -40,15 +40,9 @@ Operations on RAM are being worked on and basic network coding will follow after
 
 ### 2020 schedule
 2020 is slowly coming to a close. Preferably I want to finish an alpha build by year's end, so the following development schedule is envisioned.
-- [ ] File operations (September)
-- [ ] Dialogue system (October) 
-- [ ] GUI settings menu (October)
-- [ ] unit tests for all basic classes (October)
+- [ ] Dialogue system (November) 
+- [ ] Unit tests for all basic classes (November)
 - [ ] Network connectivity (November)
 - [ ] RAM operations (November)
-- [ ] Debug GUI (November)
 - [ ] Encounter system for dialogue (December) 
-- [ ] Basic sounds (December)
 - [ ] Up to 5 new puzzles (December)
-
-Most importantly the game should receive a proper name!

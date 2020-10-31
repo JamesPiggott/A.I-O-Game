@@ -1,0 +1,9 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="StartGame" type="Application" factoryName="Application">
+    <option name="MAIN_CLASS_NAME" value="main.StartGame" />
+    <module name="JavaComputingGame" />
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>
