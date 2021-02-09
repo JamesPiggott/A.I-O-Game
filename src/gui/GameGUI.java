@@ -12,6 +12,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.stream.Stream;
 
 import javax.swing.JButton;
@@ -372,8 +373,19 @@ public class GameGUI extends JFrame {
 		if (fileOutput != null) {
 			JLabel file_name = (JLabel) this.filePanel.getComponent(0);
 			file_name.setText("File name: " + fileOutput.getName());
-			
-			this.valuesFile.setText(this.valuesFile.getText() + " " + fileOutput.getValues().toString()); 
+			this.valuesFile.selectAll();
+			this.valuesFile.replaceSelection("");
+
+			HashMap<Integer, String> file_values = fileOutput.getValues();
+
+			String output = "";
+			int count = 0;
+
+			for(String value : file_values.values()) {
+				output = output + value + ", ";
+			}
+
+			this.valuesFile.setText(output);
 			this.valuesFile.updateUI();
 		}	
 	}
