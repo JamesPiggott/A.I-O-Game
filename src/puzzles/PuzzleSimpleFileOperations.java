@@ -1,6 +1,6 @@
 package puzzles;
 
-import assets.register.files.FileOperations;
+import register.files.FileOperations;
 
 public class PuzzleSimpleFileOperations implements Puzzle {
 	

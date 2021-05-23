@@ -3,8 +3,6 @@ package gui;
 import java.awt.Color;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -26,24 +24,19 @@ import javax.swing.text.BadLocationException;
 import javax.swing.text.DefaultHighlighter;
 import javax.swing.text.DefaultHighlighter.DefaultHighlightPainter;
 
-import assets.register.files.FileOperations;
-import assets.register.instruction.Register;
+import register.files.FileOperations;
+import register.instruction.Register;
 import main.Computer;
 import puzzles.Puzzle;
 
-@SuppressWarnings("serial")
 public class GameGUI extends JFrame {
 	
-	public Computer   computer;
-    private JTextArea   codeBox;
-    private JScrollPane pane1;
-    private JTextArea values;
+	public Computer computer;
+    private JTextArea codeBox;
+	private JTextArea values;
     private JTextArea valuesFile;
-    private String output;
-    public Thread queryThread;
-    private ArrayList<JTextArea> textAreaRegisters;
+	private ArrayList<JTextArea> textAreaRegisters;
     private JTextArea textAreaCpyCycles;
-	private JTextArea gameWorld;
 	private JTextArea description_box;
 	
 	public JPanel gamegui;
@@ -52,12 +45,7 @@ public class GameGUI extends JFrame {
 	public JPanel settingsmenu;
 	public String puzzleName;
 	public Color backgroundColor;
-	
-	private MainMenuGUI menu;
-	private PuzzleMenuGUI puzzle;
-	private SettingsMenuGUI settings;
-	
-	public JPanel resourcePanel;
+
 	public JPanel filePanel;
 
 	private boolean started;
@@ -65,7 +53,8 @@ public class GameGUI extends JFrame {
 	
 	// List of Panels, TextAreas and Buttons that should be easily reachable
 	private JButton stepButton;
-	
+	private JButton runButton;
+
 	public GameGUI(Computer computer) {
 		
 		super("Game GUI");
@@ -82,14 +71,14 @@ public class GameGUI extends JFrame {
 		this.mainmenu = new JPanel(new GridBagLayout());
 		this.settingsmenu = new JPanel(new GridBagLayout());
 		buildGUI();
-		
-		this.menu = new MainMenuGUI(this);
+
+		MainMenuGUI menu = new MainMenuGUI(this);
 		menu.buildMainMenu();
-		
-		this.puzzle = new PuzzleMenuGUI(this);
+
+		PuzzleMenuGUI puzzle = new PuzzleMenuGUI(this);
 		puzzle.buildPuzzleMenu();
-		
-		this.settings = new SettingsMenuGUI(this);
+
+		SettingsMenuGUI settings = new SettingsMenuGUI(this);
 		settings.buildSettingsMenu();
 		
 		this.add(mainmenu);
@@ -106,14 +95,14 @@ public class GameGUI extends JFrame {
         JLabel codeBoxInformation = new JLabel("Enter code:");
      	codeBox = new JTextArea("", 15, 40);
         codeBox.setEditable(true);
-        this.pane1 = new JScrollPane(codeBox);
+		JScrollPane pane1 = new JScrollPane(codeBox);
         GridBagConstraints codePanelConstraints = new GridBagConstraints();
         codePanelConstraints.gridx = 0;
         codePanelConstraints.gridy = 0;
         codePanel.add(codeBoxInformation, codePanelConstraints);
         codePanelConstraints.gridx = 0;
         codePanelConstraints.gridy = 1;
-        codePanel.add(this.pane1, codePanelConstraints);
+        codePanel.add(pane1, codePanelConstraints);
         codePanelConstraints.gridx = 1;
         codePanelConstraints.gridy = 1;
         codePanel.add(createRegisterPanel(), codePanelConstraints);
@@ -150,8 +139,7 @@ public class GameGUI extends JFrame {
 		filePanelConstraints.gridy = 1;
 		filePanel.add(fileScrollPane, filePanelConstraints);
 		filePanel.setSize(300, 300);
-		
-		
+
 		// Add each panel to the JFrame with the 'right' GridBagConstraints
 		JPanel mainPanel = new JPanel(new GridBagLayout());
 		mainPanel.setName("Main");
@@ -168,9 +156,9 @@ public class GameGUI extends JFrame {
 		mainPanel.setBackground(this.backgroundColor);
 		
 		// gameworld
-        this.gameWorld = new JTextArea("", 15, 40);
-        this.gameWorld.setEditable(false);
-        this.gameWorld.setSize(800, 500);
+		JTextArea gameWorld = new JTextArea("", 15, 40);
+        gameWorld.setEditable(false);
+        gameWorld.setSize(800, 500);
         JPanel gameworld_panel = new JPanel();
         gameworld_panel.add(gameWorld);
 		
@@ -207,7 +195,7 @@ public class GameGUI extends JFrame {
     }
 	
 	public JPanel createRegisterPanel() {
-		this.textAreaRegisters = new ArrayList<JTextArea>();
+		this.textAreaRegisters = new ArrayList<>();
 		JPanel register_panel = new JPanel(new GridBagLayout());
 		ArrayList<Register> registers = this.computer.getCPU().getRegisters();
 		
@@ -237,90 +225,70 @@ public class GameGUI extends JFrame {
 		// Return back to main menu
         JButton menuButton = new JButton("Menu");
         menuButton.setBackground(GUIMarkUp.buttonColor);
-        menuButton.addActionListener(new ActionListener()
-        {
-          public void actionPerformed(ActionEvent e)
-          {
-        	  SwitchToMainMenu(e);
-        	  started = false;
-          }
-        });
+        menuButton.addActionListener(e -> {
+			SwitchToMainMenu();
+			started = false;
+		});
         
         // Reset button stops a game and returns all start values
         JButton resetButton = new JButton("Reset");
         resetButton.setBackground(GUIMarkUp.buttonColor);
-        resetButton.addActionListener(new ActionListener() {
-          public void actionPerformed(ActionEvent e) {
-        	  setStepToEnabled();
-        	  resetComputer();
-        	  started = false;
-          }
-        });
+        resetButton.addActionListener(e -> {
+			setStepToEnabled();
+			resetComputer();
+			started = false;
+		});
         
         // Pause button interrupts a running game
         JButton pauseButton = new JButton("Pause"); 
         pauseButton.setBackground(GUIMarkUp.buttonColor);
-        pauseButton.addActionListener(new ActionListener() {
-          public void actionPerformed(ActionEvent e) {
-        	  setStepToEnabled();
-        	  new Thread(new Runnable() {
-					public void run() {
-						interruptProgram();
-					}
-				}).start();
-          }
-        });
+        pauseButton.addActionListener(e -> {
+			setStepToEnabled();
+			new Thread(this::interruptProgram).start();
+		});
         
         // Advance one cycle (perform one line of code)
         this.stepButton = new JButton("Step"); 
         stepButton.setBackground(GUIMarkUp.buttonColor);
-        stepButton.addActionListener(new ActionListener() {
-          public void actionPerformed(ActionEvent e) {
-        	  if (started == false) {
-        		  setAllMarkPoints(codeBox.getText());
-        		  started = true;
-        	  }    
-        	  sendCodetoGame(codeBox.getText(), true, false);
-          }
-        });
+        stepButton.addActionListener(e -> {
+			if (!started) {
+				setAllMarkPoints(codeBox.getText());
+				started = true;
+			}
+			sendCodetoGame(codeBox.getText(), false);
+		});
         
         // Run code indefinitely, but slow enough to observe
-        JButton runButton = new JButton("Run");
+        this.runButton = new JButton("Run");
         runButton.setBackground(GUIMarkUp.buttonColor);
-        runButton.addActionListener(new ActionListener() {
-          public void actionPerformed(ActionEvent e) {
-        	  setStepToNotEnablede();
-        	  if (getInterrupted() == true) {
-        		  resumeProgram(false);
-        	  } else {
-            	  new Thread(new Runnable() {
-  					public void run() {
-  						setAllMarkPoints(codeBox.getText());
-  						sendCodetoGame(codeBox.getText(), false, false);
-  					}
-  				}).start();  
-        	  }
-          }
-        });
+        runButton.addActionListener(e -> {
+			setStepToNotEnabled();
+			if (getInterrupted()) {
+				resumeProgram(false);
+			} else {
+				started = true;
+				new Thread(() -> {
+					setAllMarkPoints(codeBox.getText());
+					sendCodetoGame(codeBox.getText(), false);
+				}).start();
+			}
+		});
         
         // Run code indefinitely, but at a much faster rate to quickly pass all tests.
         JButton runFastButton = new JButton("Run Fast");
         runFastButton.setBackground(GUIMarkUp.buttonColor);
-        runFastButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				setStepToNotEnablede();
-        	  if (getInterrupted() == true) {
-        		  resumeProgram(true);
-        	  } else {		
-  				new Thread(new Runnable() {
-					public void run() {
-						setAllMarkPoints(codeBox.getText());
-						sendCodetoGame(codeBox.getText(), false, true);
-					}
-				}).start();  
-        	  }
+        runFastButton.addActionListener(e -> {
+			setStepToNotEnabled();
+			if (getInterrupted()) {
+			resumeProgram(true);
+			} else {
+				started = true;
+			    new Thread(() -> {
+				    setAllMarkPoints(codeBox.getText());
+				    sendCodetoGame(codeBox.getText(), true);
+			    }).start();
 			}
-        });
+		});
         
         // Control panel
         JPanel buttonPanel = new JPanel();
@@ -354,8 +322,8 @@ public class GameGUI extends JFrame {
 		this.computer.setAllJumpLines(code);
 	}
 	
-	public void sendCodetoGame(String code, boolean executeSingleLine, boolean runFast) {
-		this.computer.retrieveUserInstruction(code, this, executeSingleLine, runFast);
+	public void sendCodetoGame(String code, boolean runFast) {
+		this.computer.retrieveUserInstruction(code, runFast);
 	}
 
 	public void displayOutputValue() {	
@@ -364,8 +332,8 @@ public class GameGUI extends JFrame {
 		Register register = this.computer.retrieveCurrentValueCPUs().get(0);	
 		if (register != null) {
 			String CPUValue = register.getValue();
-			this.output = this.values.getText() + " " + CPUValue;
-			this.values.setText(this.output);
+			String output = this.values.getText() + " " + CPUValue;
+			this.values.setText(output);
 			this.values.updateUI();
 		}
 		
@@ -378,14 +346,13 @@ public class GameGUI extends JFrame {
 
 			HashMap<Integer, String> file_values = fileOutput.getValues();
 
-			String output = "";
-			int count = 0;
+			StringBuilder output = new StringBuilder();
 
 			for(String value : file_values.values()) {
-				output = output + value + ", ";
+				output.append(value).append(", ");
 			}
 
-			this.valuesFile.setText(output);
+			this.valuesFile.setText(output.toString());
 			this.valuesFile.updateUI();
 		}	
 	}
@@ -404,20 +371,20 @@ public class GameGUI extends JFrame {
 	}
 	
 	public void resumeProgram(boolean runfast) {
-		if (runfast == true) {
+		if (runfast) {
 			this.computer.resumeProgramRunFast();
 		} else {
 			this.computer.resumeProgram();
 		}
 	}
 	
-	private void setStepToNotEnablede() {                                
+	private void setStepToNotEnabled() {
 		this.stepButton.setEnabled(false);
-	} 
+	}
 	
 	private void setStepToEnabled() {                                
 		this.stepButton.setEnabled(true);
-	} 
+	}
 		
 	public void highlightCodeLine( JTextArea   codeBox, Computer   computer) {
 		codeBox.getHighlighter().removeAllHighlights();
@@ -450,7 +417,7 @@ public class GameGUI extends JFrame {
 		
 		int index = 0;
 		for(Register register: registers) {
-			this.textAreaRegisters.get(index).setText("");;
+			this.textAreaRegisters.get(index).setText("");
 			register.setValue("0");
 			index++;
 		}
@@ -483,7 +450,7 @@ public class GameGUI extends JFrame {
         } 
 	}
 	
-	private void SwitchToMainMenu(java.awt.event.ActionEvent evt) {
+	private void SwitchToMainMenu() {
 		try {
 			saveGame();
 		} catch (FileNotFoundException e) {

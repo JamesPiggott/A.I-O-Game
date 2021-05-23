@@ -1,6 +1,6 @@
 package main;
 
-import assets.register.cpu.CPU;
+import register.cpu.CPU;
 
 /**
  * Class ComputerArchitecture defines the general characteristics of the computer architecture: CPU type, amount of RAM etc.

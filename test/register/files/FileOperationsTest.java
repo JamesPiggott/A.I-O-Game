@@ -1,4 +1,4 @@
-package assets.register.files;
+package register.files;
 
 import org.junit.Test;
 

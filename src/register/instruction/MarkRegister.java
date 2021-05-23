@@ -1,4 +1,4 @@
-package assets.register.instruction;
+package register.instruction;
 
 public class MarkRegister implements Register {
 	

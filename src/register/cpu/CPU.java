@@ -1,4 +1,4 @@
-package assets.register.cpu;
+package register.cpu;
 
 public interface CPU {
 	

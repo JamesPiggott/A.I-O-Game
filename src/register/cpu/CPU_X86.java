@@ -1,12 +1,12 @@
-package assets.register.cpu;
+package register.cpu;
 
 import java.util.ArrayList;
 
-import assets.register.files.FileOperations;
-import assets.register.instruction.BooleanRegister;
-import assets.register.instruction.GeneralPurposeRegister;
-import assets.register.instruction.MarkRegister;
-import assets.register.instruction.Register;
+import register.files.FileOperations;
+import register.instruction.BooleanRegister;
+import register.instruction.GeneralPurposeRegister;
+import register.instruction.MarkRegister;
+import register.instruction.Register;
 
 public class CPU_X86 implements CPU {
 	

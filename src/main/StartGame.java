@@ -9,6 +9,6 @@ public class StartGame {
 	
 	public void startGame() {
 		Computer computer = new Computer();
-		computer.startGame(computer);
+		computer.startGame();
 	}
 }

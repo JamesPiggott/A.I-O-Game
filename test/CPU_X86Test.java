@@ -1,7 +1,7 @@
 
 
 import org.junit.Test;
-import assets.register.cpu.CPU_X86;
+import register.cpu.CPU_X86;
 
 public class CPU_X86Test {
 

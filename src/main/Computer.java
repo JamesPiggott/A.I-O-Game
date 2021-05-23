@@ -1,8 +1,8 @@
 package main;
 
-import assets.register.cpu.CPU_X86;
-import assets.register.instruction.MarkRegister;
-import assets.register.instruction.Register;
+import register.cpu.CPU_X86;
+import register.instruction.MarkRegister;
+import register.instruction.Register;
 import gui.GameGUI;
 import puzzles.Puzzle;
 import java.io.IOException;
@@ -25,7 +25,6 @@ public class Computer {
 	public boolean solutionIncorrect;
 	
 	public int currentLine;
-	public int endOfLoopLine;
 	public String[] instruction_lines;
 	
 	public Thread gameThread;
@@ -43,38 +42,37 @@ public class Computer {
 	/*
 	 * Start the game by activating the GUI and set gameRunning to true.
 	 */
-	public void startGame(Computer computer) {
+	public void startGame() {
 		boolean guirunning = false;
 		
 		// Set up a new graphical user interface for the game
-		while (this.gameRunning == true) {
-			if (guirunning == false) {
+		while (this.gameRunning) {
+			if (!guirunning) {
 				this.gui = new GameGUI(this);				
 				guirunning = true;
 			}
 		}
 	}
 	
-	public void retrieveUserInstruction(String codetorun, GameGUI gameGUI, boolean singleLine, boolean runFast) {	
+	public void retrieveUserInstruction(String codetorun, boolean singleLine) {
 		this.instruction_lines = codetorun.split("\n");
-		this.runFast = runFast;
 
-		if (singleLine == true && this.cpu_cycle < 1000) {
+		if (singleLine && this.cpu_cycle < 1000) {
 			runSingleLineOfCode(instruction_lines);
 		} else if (this.cpu_cycle < 1000)  {	
-			runContinousProgramLoop(instruction_lines, gameGUI, singleLine);
+			runContinousProgramLoop(instruction_lines);
 		}
 	}
 	
-	public void runContinousProgramLoop(String[] instruction_lines, GameGUI gameGUI, boolean singleLine) {
+	public void runContinousProgramLoop(String[] instruction_lines) {
 				
-		while (currentLine <= instruction_lines.length && this.cpu_cycle < 1000 && this.gameRunning == true) {
+		while (currentLine <= instruction_lines.length && this.cpu_cycle < 1000 && this.gameRunning) {
 			
-			if (this.interrupted == true) {
+			if (this.interrupted) {
 				while (true) {
 					try {
 						Thread.sleep(5);
-						if (this.interrupted == false) {
+						if (!this.interrupted) {
 							break;
 						}
 					} catch (InterruptedException e) {
@@ -205,7 +203,7 @@ public class Computer {
 	
 	public void performBreak(String[] instruction_elements) {
 		if (instruction_elements.length == 1 && instruction_elements[0].contains("BREAK"))  {
-			if (this.getCPU().getBooleanRegister().getValueBoolean() == true) {
+			if (this.getCPU().getBooleanRegister().getValueBoolean()) {
 				for (int jump : this.cpu_one.getJumpList()) {
 					if (jump > this.currentLine) {
 						this.currentLine = jump;
@@ -232,7 +230,7 @@ public class Computer {
 	public void setAllJumpLines(String all_lines) {	
 		int count = 0;
 		
-		ArrayList<Integer> list_of_jump_lines = new ArrayList<Integer>();
+		ArrayList<Integer> list_of_jump_lines = new ArrayList<>();
 	
 		String[] lines_to_check = all_lines.split("\n");
 		for (String line : lines_to_check) {
@@ -257,7 +255,7 @@ public class Computer {
 	
 	public void compareResults() {	
 		if (this.puzzle.getValue(this.cpu_cycle).contentEquals(this.cpu_one.getValueRegisters())) {
-			if (this.cpu_cycle == 999 && this.solutionIncorrect == false) {
+			if (this.cpu_cycle == 999 && !this.solutionIncorrect) {
 				this.gui.displayPuzzleOutcome("Puzzle solved");
 				updatePuzzleResult();
 			} 
@@ -273,16 +271,16 @@ public class Computer {
 	public void updatePuzzleResult() {
         if (Files.exists(Paths.get("results/results.txt"))) {
         	try {
-        		String newresult = "";
+        		StringBuilder newresult = new StringBuilder();
 				List<String> results = Files.readAllLines(Paths.get("results/results.txt"), StandardCharsets.UTF_8);	
 				for (String result : results) {
 					System.out.println(result);
 					if (result.contains("One")) {
-						newresult = newresult + "PuzzleOne=Solved" + "\n";
+						newresult.append("PuzzleOne=Solved").append("\n");
 					} else if (result.contains("Five")) {
-						newresult = newresult + "PuzzleFive=Unsolved";
+						newresult.append("PuzzleFive=Unsolved");
 					} else {
-						newresult = newresult + result + "\n";
+						newresult.append(result).append("\n");
 					}
 
 				}
@@ -311,6 +309,7 @@ public class Computer {
 		this.cpu_cycle = 0;
 		this.currentLine = 0;
 		this.gameRunning = true;
+//		this.interrupted = false;
 	}
 	
 	public int getCurrentLine() {
