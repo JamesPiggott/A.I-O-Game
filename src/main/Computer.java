@@ -1,5 +1,6 @@
 package main;
 
+import puzzles.PuzzleSimpleOscillatingValue;
 import register.cpu.CPU_X86;
 import register.instruction.MarkRegister;
 import register.instruction.Register;
@@ -37,6 +38,7 @@ public class Computer {
 		this.currentLine = 0;
 		this.gameThread = new Thread();
 		this.solutionIncorrect = false;
+		this.puzzle = new PuzzleSimpleOscillatingValue();
 	}
 	
 	/*
@@ -54,10 +56,10 @@ public class Computer {
 		}
 	}
 	
-	public void retrieveUserInstruction(String codetorun, boolean singleLine) {
+	public void retrieveUserInstruction(String codetorun, boolean runFast) {
 		this.instruction_lines = codetorun.split("\n");
 
-		if (singleLine && this.cpu_cycle < 1000) {
+		if (!runFast && this.cpu_cycle < 1000) {
 			runSingleLineOfCode(instruction_lines);
 		} else if (this.cpu_cycle < 1000)  {	
 			runContinousProgramLoop(instruction_lines);
