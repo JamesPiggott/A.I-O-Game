@@ -54,6 +54,7 @@ public class GameGUI extends JFrame {
 	// List of Panels, TextAreas and Buttons that should be easily reachable
 	private JButton stepButton;
 	private JButton runButton;
+	private JButton runFastButton;
 
 	public GameGUI(Computer computer) {
 		
@@ -248,7 +249,7 @@ public class GameGUI extends JFrame {
 		});
         
         // Advance one cycle (perform one line of code)
-        this.stepButton = new JButton("Step"); 
+        stepButton = new JButton("Step");
         stepButton.setBackground(GUIMarkUp.buttonColor);
         stepButton.addActionListener(e -> {
 			if (!started) {
@@ -259,7 +260,7 @@ public class GameGUI extends JFrame {
 		});
         
         // Run code indefinitely, but slow enough to observe
-        this.runButton = new JButton("Run");
+        runButton = new JButton("Run");
         runButton.setBackground(GUIMarkUp.buttonColor);
         runButton.addActionListener(e -> {
 			setStepToNotEnabled();
@@ -269,18 +270,18 @@ public class GameGUI extends JFrame {
 				started = true;
 				new Thread(() -> {
 					setAllMarkPoints(codeBox.getText());
-					sendCodetoGame(codeBox.getText(), false);
+					sendCodetoGame(codeBox.getText(), true);
 				}).start();
 			}
 		});
         
         // Run code indefinitely, but at a much faster rate to quickly pass all tests.
-        JButton runFastButton = new JButton("Run Fast");
+        runFastButton = new JButton("Run Fast");
         runFastButton.setBackground(GUIMarkUp.buttonColor);
         runFastButton.addActionListener(e -> {
 			setStepToNotEnabled();
 			if (getInterrupted()) {
-			resumeProgram(true);
+				resumeProgram(true);
 			} else {
 				started = true;
 			    new Thread(() -> {

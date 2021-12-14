@@ -58,7 +58,6 @@ public class Computer {
 	
 	public void retrieveUserInstruction(String codetorun, boolean runFast) {
 		this.instruction_lines = codetorun.split("\n");
-
 		if (!runFast && this.cpu_cycle < 1000) {
 			runSingleLineOfCode(instruction_lines);
 		} else if (this.cpu_cycle < 1000)  {	
@@ -109,6 +108,15 @@ public class Computer {
 	public void resumeProgramRunFast() {
 		this.interrupted = false;
 		this.runFast = true;
+	}
+
+	public void resetComputer() {
+		this.interruptProgram();
+		this.cpu_one = new CPU_X86();
+		this.cpu_cycle = 0;
+		this.currentLine = 0;
+		this.gameRunning = true;
+		this.interrupted = true;
 	}
 	
 	public void runSingleLineOfCode(String[] instruction_lines) {
@@ -303,15 +311,6 @@ public class Computer {
 	
 	public int getCPUCycleCount() {
 		return this.cpu_cycle;
-	}
-	
-	public void resetComputer() {
-		this.interruptProgram();
-		this.cpu_one = new CPU_X86();
-		this.cpu_cycle = 0;
-		this.currentLine = 0;
-		this.gameRunning = true;
-//		this.interrupted = false;
 	}
 	
 	public int getCurrentLine() {
