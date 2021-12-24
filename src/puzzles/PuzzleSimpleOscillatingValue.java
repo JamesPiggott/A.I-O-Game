@@ -40,6 +40,11 @@ public class PuzzleSimpleOscillatingValue implements Puzzle {
 	}
 
 	@Override
+	public void resetFile() {
+
+	}
+
+	@Override
 	public FileOperations getFile() {
 		// TODO Auto-generated method stub
 		return null;

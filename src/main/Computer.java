@@ -1,7 +1,8 @@
 package main;
 
-import puzzles.PuzzleSimpleOscillatingValue;
+import puzzles.PuzzleSimpleFileOperations;
 import register.cpu.CPU_X86;
+import register.files.FileOperations;
 import register.instruction.MarkRegister;
 import register.instruction.Register;
 import gui.GameGUI;
@@ -38,7 +39,6 @@ public class Computer {
 		this.currentLine = 0;
 		this.gameThread = new Thread();
 		this.solutionIncorrect = false;
-		this.puzzle = new PuzzleSimpleOscillatingValue();
 	}
 	
 	/*
@@ -59,8 +59,9 @@ public class Computer {
 	public void retrieveUserInstruction(String codetorun, boolean runFast) {
 		this.instruction_lines = codetorun.split("\n");
 		if (!runFast && this.cpu_cycle < 1000) {
+			this.interrupted = true;
 			runSingleLineOfCode(instruction_lines);
-		} else if (this.cpu_cycle < 1000)  {	
+		} else if (this.cpu_cycle < 1000)  {
 			runContinousProgramLoop(instruction_lines);
 		}
 	}
@@ -110,7 +111,7 @@ public class Computer {
 		this.runFast = true;
 	}
 
-	public void resetComputer() {
+	public void resetComputer(Puzzle puzzle) {
 		this.interruptProgram();
 		this.cpu_one = new CPU_X86();
 		this.cpu_cycle = 0;
@@ -262,19 +263,39 @@ public class Computer {
 	public ArrayList<Register> retrieveCurrentValueCPUs() {
 		return this.cpu_one.getRegisters();
 	}
+
+	public FileOperations retrieveCurrentFileOperations() {
+		return this.cpu_one.getCurrentFile();
+	}
 	
-	public void compareResults() {	
-		if (this.puzzle.getValue(this.cpu_cycle).contentEquals(this.cpu_one.getValueRegisters())) {
-			if (this.cpu_cycle == 999 && !this.solutionIncorrect) {
-				this.gui.displayPuzzleOutcome("Puzzle solved");
-				updatePuzzleResult();
-			} 
+	public void compareResults() {
+
+		if (this.puzzle.getClass().equals(PuzzleSimpleFileOperations.class)) {
+			if (this.cpu_one.file_list.get(0).getValues().containsValue("hades")) {
+				if (this.cpu_cycle == 999 && !this.solutionIncorrect) {
+					this.gui.displayPuzzleOutcome("Puzzle solved");
+					updatePuzzleResult();
+				}
+			} else {
+				this.solutionIncorrect = true;
+				if (this.cpu_cycle > 99) {
+					this.gui.displayPuzzleOutcome("Game Over!");
+					this.gameRunning = false;
+				}
+			}
 		} else {
-			this.solutionIncorrect = true;
-			if (this.cpu_cycle > 99) {
-				this.gui.displayPuzzleOutcome("Game Over!");
-				this.gameRunning = false;
-			} 
+			if (this.puzzle.getValue(this.cpu_cycle).contentEquals(this.cpu_one.getValueRegisters())) {
+				if (this.cpu_cycle == 999 && !this.solutionIncorrect) {
+					this.gui.displayPuzzleOutcome("Puzzle solved");
+					updatePuzzleResult();
+				}
+			} else {
+				this.solutionIncorrect = true;
+				if (this.cpu_cycle > 99) {
+					this.gui.displayPuzzleOutcome("Game Over!");
+					this.gameRunning = false;
+				}
+			}
 		}
 	}
 
@@ -315,5 +336,11 @@ public class Computer {
 	
 	public int getCurrentLine() {
 		return this.currentLine;
+	}
+
+	public void setPuzzle(Puzzle puzzle) {
+		this.puzzle = puzzle;
+		puzzle.resetFile();
+		this.cpu_one.file_list.add(puzzle.getFile());
 	}
 }

@@ -382,6 +382,14 @@ public class CPU_X86 implements CPU {
 				this.currentFile.seekHandler("-", seek);
 			}
 		}
+
+		// Store SEEK location in Register X
+//		this.register_list.get(0).setValue("" + this.currentFile.getLocationHandler());
+
+		// Store SEEK value in Register Y
+//		this.register_list.get(1).setValue(this.currentFile.getValue());
+
+
 	}
 	
 	public void performVoid(String[] code_line) {
@@ -428,8 +436,10 @@ public class CPU_X86 implements CPU {
 	public FileOperations getFileOperations(String name) {
 		if (this.file_list != null) {
 			for (FileOperations file : this.file_list) {
-				if (file.getName().contentEquals(name)) {
-					return file;
+				if (file != null) {
+					if (file.getName().contentEquals(name)) {
+						return file;
+					}
 				}
 			}
 		} 

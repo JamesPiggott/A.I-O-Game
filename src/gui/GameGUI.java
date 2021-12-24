@@ -46,7 +46,7 @@ public class GameGUI extends JFrame {
 	public String puzzleName;
 	public Color backgroundColor;
 	public Color backgroundPanelColor;
-
+	public Puzzle puzzle;
 	public JPanel filePanel;
 
 	private boolean started;
@@ -54,6 +54,8 @@ public class GameGUI extends JFrame {
 	
 	// List of Panels, TextAreas and Buttons that should be easily reachable
 	private JButton stepButton;
+	private JButton runButton;
+	private JButton runFastButton;
 
 	public GameGUI(Computer computer) {
 		
@@ -220,7 +222,8 @@ public class GameGUI extends JFrame {
 	}
 	
 	public void setPuzzle(Puzzle puzzle) {
-    	this.computer.puzzle = puzzle;
+		this.puzzle = puzzle;
+    	this.computer.setPuzzle(puzzle);
     	this.description_box.setText(this.computer.puzzle.getDescription());
 	}
 	
@@ -239,6 +242,7 @@ public class GameGUI extends JFrame {
         resetButton.setBackground(GUIMarkUp.buttonColor);
         resetButton.addActionListener(e -> {
 			setStepToEnabled();
+			setRunToEnabled();
 			resetComputer();
 			started = false;
 		});
@@ -248,6 +252,7 @@ public class GameGUI extends JFrame {
         pauseButton.setBackground(GUIMarkUp.buttonColor);
         pauseButton.addActionListener(e -> {
 			setStepToEnabled();
+			setRunToEnabled();
 			new Thread(this::interruptProgram).start();
 		});
         
@@ -255,6 +260,8 @@ public class GameGUI extends JFrame {
         stepButton = new JButton("Step");
         stepButton.setBackground(GUIMarkUp.buttonColor);
         stepButton.addActionListener(e -> {
+			setRunToEnabled();
+			setRunFastToEnabled();
 			if (!started) {
 				setAllMarkPoints(codeBox.getText());
 				started = true;
@@ -263,10 +270,12 @@ public class GameGUI extends JFrame {
 		});
         
         // Run code indefinitely, but slow enough to observe
-		JButton runButton = new JButton("Run");
+		this.runButton = new JButton("Run");
         runButton.setBackground(GUIMarkUp.buttonColor);
         runButton.addActionListener(e -> {
-			setStepToNotEnabled();
+			setStepToEnabled();
+			setRunToNotEnabled();
+			setRunFastToEnabled();
 			resumeProgram(false);
 			started = true;
 			new Thread(() -> {
@@ -276,10 +285,12 @@ public class GameGUI extends JFrame {
 		});
         
         // Run code indefinitely, but at a much faster rate to quickly pass all tests.
-		JButton runFastButton = new JButton("Run Fast");
+		this.runFastButton = new JButton("Run Fast");
         runFastButton.setBackground(GUIMarkUp.buttonColor);
         runFastButton.addActionListener(e -> {
-			setStepToNotEnabled();
+			setStepToEnabled();
+			setRunFastToEnabled();
+			setRunFastToNotEnabled();
 			resumeProgram(true);
 			started = true;
 			new Thread(() -> {
@@ -327,15 +338,18 @@ public class GameGUI extends JFrame {
 	public void displayOutputValue() {	
 		highlightCodeLine(this.codeBox, this.computer);
 		
-		Register register = this.computer.retrieveCurrentValueCPUs().get(0);	
+		Register register = this.computer.retrieveCurrentValueCPUs().get(0);
 		if (register != null) {
 			String CPUValue = register.getValue();
 			String output = this.values.getText() + " " + CPUValue;
-			this.values.setText(output);
-			this.values.updateUI();
+
+			if (this.values.getFont() != null) {
+				this.values.setText(output);
+				this.values.updateUI();
+			}
 		}
 		
-		FileOperations fileOutput = this.computer.getCPU().getCurrentFile();
+		FileOperations fileOutput = this.computer.retrieveCurrentFileOperations();
 		if (fileOutput != null) {
 			JLabel file_name = (JLabel) this.filePanel.getComponent(0);
 			file_name.setText("File name: " + fileOutput.getName());
@@ -352,7 +366,7 @@ public class GameGUI extends JFrame {
 
 			this.valuesFile.setText(output.toString());
 			this.valuesFile.updateUI();
-		}	
+		}
 	}
 	
 	public void displayPuzzleOutcome(String message) {
@@ -383,6 +397,22 @@ public class GameGUI extends JFrame {
 	private void setStepToEnabled() {                                
 		this.stepButton.setEnabled(true);
 	}
+
+	private void setRunToNotEnabled() {
+		this.runButton.setEnabled(false);
+	}
+
+	private void setRunToEnabled() {
+		this.runButton.setEnabled(true);
+	}
+
+	private void setRunFastToNotEnabled() {
+		this.runFastButton.setEnabled(false);
+	}
+
+	private void setRunFastToEnabled() {
+		this.runFastButton.setEnabled(true);
+	}
 		
 	public void highlightCodeLine( JTextArea   codeBox, Computer   computer) {
 		codeBox.getHighlighter().removeAllHighlights();
@@ -407,7 +437,7 @@ public class GameGUI extends JFrame {
 	}
 	
 	public void resetComputer() {
-		this.computer.resetComputer();
+		this.computer.resetComputer(this.puzzle);
 		this.values.setText("");
 		this.valuesFile.setText("");
 		
@@ -449,7 +479,7 @@ public class GameGUI extends JFrame {
 	private void SwitchToMainMenu() {
 		this.interruptProgram();
 		this.setStepToEnabled();
-
+		this.setRunToEnabled();
 		try {
 			saveGame();
 		} catch (FileNotFoundException e) {

@@ -1,5 +1,2 @@
 MOV 1 x
-MOV 1 x
-FCH test
-MOV x test
-MOV test y
+MOV 0 x

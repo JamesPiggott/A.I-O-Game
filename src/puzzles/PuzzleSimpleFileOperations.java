@@ -14,6 +14,7 @@ public class PuzzleSimpleFileOperations implements Puzzle {
 		this.file.insertValue("Joey");
 		this.file.insertValue("Emmanuel");
 		this.file.insertValue("Paul");
+		this.file.setLocationHandler(0);
 	}
 	
 
@@ -41,6 +42,19 @@ public class PuzzleSimpleFileOperations implements Puzzle {
 	@Override
 	public FileOperations getFile() {
 		return this.file;
+	}
+
+	/*
+	 * Ensure the file is set according to initial puzzle specs
+	 */
+	public void resetFile() {
+		this.file = new FileOperations("garbage");
+		this.file.insertValue("Dade");
+		this.file.insertValue("Kate");
+		this.file.insertValue("Joey");
+		this.file.insertValue("Emmanuel");
+		this.file.insertValue("Paul");
+		this.file.setLocationHandler(0);
 	}
 
 }

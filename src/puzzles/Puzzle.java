@@ -12,4 +12,6 @@ public interface Puzzle {
 	
 	public boolean checkResult();
 
+	public void resetFile();
+
 }

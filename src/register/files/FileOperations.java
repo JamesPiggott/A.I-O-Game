@@ -47,6 +47,10 @@ public class FileOperations {
 			location_handler++;
 		}
 	}
+
+	public String getValue() {
+		return this.file_contents.get(this.location_handler);
+	}
 		
 	/*
 	 * Remove the value currently index by location_handler
@@ -69,6 +73,13 @@ public class FileOperations {
 	
 	public int getLocationHandler() {
 		return this.location_handler;
+	}
+
+	/*
+	 * Override the value of the file location handler. Can be used when the puzzle is initialized
+	 */
+	public void setLocationHandler(int location_handler) {
+		this.location_handler = location_handler;
 	}
 	
 	public HashMap<Integer, String> getValues() {
